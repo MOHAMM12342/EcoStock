@@ -85,15 +85,17 @@ def test_api_forecast(client):
     assert "Hamb" in data["predictions_by_horizon"]
     assert "Master" in data["predictions_by_horizon"]
     assert len(data["predictions_by_horizon"]["Whopper"]) == 5
+    assert data["model_type"] == "LightGBM Poisson Regression"
+    assert "predictions_by_product" in data
 
 
 def test_api_forecast_model_info(client):
     res = client.get("/api/forecast/model-info")
     assert res.status_code == 200
     data = res.json()
-    assert data["model_file"] == "forecast.pt"
-    assert data["class_name"] == "ForecastTrees"
-    assert data["num_trees"] == 315
-    assert data["input_features"] == 61
+    assert data["model_type"] == "LightGBM Poisson Regression"
+    assert data["class_name"] == "DemandForecaster"
+    assert data["num_product_models"] == 3
+    assert data["inference_engine"] == "LightGBM"
 
 

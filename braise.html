@@ -425,7 +425,7 @@ h1{font:400 clamp(2.2rem,5vw,4rem)/1.05 'Anton',Impact,sans-serif;text-transform
         </div>
 
         <!-- model-tag relocated to steaks summary header -->
-        <small id="model-tag" style="display:inline-block;margin-top:8px;padding:2px 8px;border-radius:4px;background:rgba(255,90,31,.12);color:var(--ember);font:700 .70rem 'JetBrains Mono',monospace">🧠 Modèle : forecast.pt (TorchScript)</small>
+        <small id="model-tag" style="display:inline-block;margin-top:8px;padding:2px 8px;border-radius:4px;background:rgba(255,90,31,.12);color:var(--ember);font:700 .70rem 'JetBrains Mono',monospace">🧠 Modèle : LightGBM Poisson</small>
       </div>
     </div>
   </section>
@@ -1558,7 +1558,7 @@ $('#th').onclick=()=>{const r=document.documentElement,d=r.dataset.theme?r.datas
 decide();render();
 fetch('/api/forecast/model-info').then(r=>r.json()).then(d=>{
   const el=$('#model-tag');
-  if(el) el.textContent=`🧠 ${d.model_file} (${d.num_trees} arbres · ${d.inference_engine})`;
+  if(el) el.textContent=`🧠 ${d.class_name} (${d.num_product_models} produits · ${d.inference_engine})`;
 }).catch(()=>{});
 setTimeout(()=>{document.body.classList.add('ready');loop()},1600);
 </script>

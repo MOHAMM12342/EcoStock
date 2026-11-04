@@ -18,7 +18,6 @@ from pydantic import BaseModel
 from src.data.generate import generate_30min_dataset
 from src.export.excel import export_journal_to_excel
 from src.forecast.model import DemandForecaster, set_global_forecaster
-from src.forecast.pt_model import get_pt_model
 from src.policy.newsvendor import decide_fixed_policy, decide_newsvendor
 from src.simulator.inventory import InventoryManager
 from src.simulator.runner import simulate_day
@@ -87,25 +86,83 @@ def health_check():
 
 @app.get("/api/forecast")
 def get_realtime_forecast():
-    """Prévisions en temps réel issues du modèle PyTorch TorchScript (forecast.pt)."""
-    pt_model = get_pt_model()
-    return pt_model.predict_for_service()
+    """Prévisions en temps réel issues du modèle de régression LightGBM Poisson."""
+    from datetime import datetime
+    import pandas as pd
+
+    forecaster = get_or_train_forecaster()
+    now = datetime.now()
+
+    products = ["Whopper", "Hamb", "Master"]
+    rows = []
+    for prod in products:
+        rows.append({
+            "produit": prod,
+            "hour": now.hour,
+            "minute": (now.minute // 30) * 30,
+            "day_of_week": now.weekday(),
+            "month": now.month,
+            "is_weekend": 1 if now.weekday() >= 5 else 0,
+            "is_holiday": 0,
+            "is_holiday_eve": 0,
+            "is_student_night": 1 if (now.weekday() in (3, 4) and now.hour >= 19) else 0,
+            "temperature": 19.5,
+            "rain_mm": 0.0,
+        })
+
+    features_df = pd.DataFrame(rows)
+    predictions = forecaster.predict(features_df)
+
+    predictions_by_product = {}
+    for _, row in predictions.iterrows():
+        predictions_by_product[row["product"]] = {
+            "mu": row["mu"],
+            "q10": row["q10"],
+            "q50": row["q50"],
+            "q90": row["q90"],
+            "baseline_mu": row["baseline_mu"],
+        }
+
+    total_mu = sum(p["mu"] for p in predictions_by_product.values())
+
+    return {
+        "model_type": "LightGBM Poisson Regression",
+        "inference_engine": "LightGBM",
+        "timestamp": now.isoformat(),
+        "time_str": now.strftime("%H:%M"),
+        "products": products,
+        "predictions_by_product": predictions_by_product,
+        "predictions_by_horizon": {
+            prod: [predictions_by_product[prod]["mu"]] * 5
+            for prod in products
+        },
+        "total_steaks_predicted_15min": round(total_mu * 5, 1),
+        "peak_recommendation": {
+            prod: predictions_by_product[prod]["q90"]
+            for prod in products
+        },
+    }
 
 
 @app.get("/api/forecast/model-info")
 def get_forecast_model_info():
-    """Métadonnées du modèle PyTorch TorchScript."""
-    pt_model = get_pt_model()
+    """Métadonnées du modèle de régression LightGBM Poisson."""
+    forecaster = get_or_train_forecaster()
+    n_models = len(forecaster.models)
     return {
-        "model_file": str(pt_model.model_path.name),
-        "class_name": "ForecastTrees",
-        "num_trees": pt_model.num_trees,
-        "tree_depth": pt_model.tree_depth,
-        "input_features": 61,
-        "output_dimensions": pt_model.output_dim,
-        "horizons_minutes": [3, 6, 9, 12, 15],
-        "products": ["Whopper", "Hamb", "Master"],
-        "inference_engine": "PyTorch" if pt_model.torch_model is not None else "Pure NumPy",
+        "model_type": "LightGBM Poisson Regression",
+        "class_name": "DemandForecaster",
+        "n_estimators": 150,
+        "num_leaves": 63,
+        "num_product_models": n_models,
+        "products": list(forecaster.models.keys()),
+        "feature_columns": [
+            "hour", "minute", "day_of_week", "month", "is_weekend",
+            "is_holiday", "is_holiday_eve", "is_student_night",
+            "temperature", "rain_mm", "baseline_mu",
+        ],
+        "quantiles": ["q10", "q50", "q90"],
+        "inference_engine": "LightGBM",
         "status": "ready",
     }
 
