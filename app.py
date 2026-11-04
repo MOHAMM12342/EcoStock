@@ -18,6 +18,7 @@ from pydantic import BaseModel
 from src.data.generate import generate_30min_dataset
 from src.export.excel import export_journal_to_excel
 from src.forecast.model import DemandForecaster, set_global_forecaster
+from src.forecast.pt_model import get_pt_model
 from src.policy.newsvendor import decide_fixed_policy, decide_newsvendor
 from src.simulator.inventory import InventoryManager
 from src.simulator.runner import simulate_day
@@ -71,6 +72,7 @@ def get_or_train_forecaster():
 
 
 @app.get("/", response_class=HTMLResponse)
+@app.get("/braise.html", response_class=HTMLResponse)
 def serve_ui():
     """Sert l'interface utilisateur Braise."""
     if not HTML_FILE.exists():
@@ -81,6 +83,31 @@ def serve_ui():
 @app.get("/api/health")
 def health_check():
     return {"status": "ok", "app": "Braise", "architecture": 1}
+
+
+@app.get("/api/forecast")
+def get_realtime_forecast():
+    """Prévisions en temps réel issues du modèle PyTorch TorchScript (forecast.pt)."""
+    pt_model = get_pt_model()
+    return pt_model.predict_for_service()
+
+
+@app.get("/api/forecast/model-info")
+def get_forecast_model_info():
+    """Métadonnées du modèle PyTorch TorchScript."""
+    pt_model = get_pt_model()
+    return {
+        "model_file": str(pt_model.model_path.name),
+        "class_name": "ForecastTrees",
+        "num_trees": pt_model.num_trees,
+        "tree_depth": pt_model.tree_depth,
+        "input_features": 61,
+        "output_dimensions": pt_model.output_dim,
+        "horizons_minutes": [3, 6, 9, 12, 15],
+        "products": ["Whopper", "Hamb", "Master"],
+        "inference_engine": "PyTorch" if pt_model.torch_model is not None else "Pure NumPy",
+        "status": "ready",
+    }
 
 
 @app.post("/api/simulate")
@@ -119,7 +146,6 @@ def run_simulation(
 def get_inventory():
     """Retourne l'état complet de l'inventaire en temps réel et les pertes potentielles."""
     summary = LIVE_INVENTORY.get_summary_report()
-    # Taux de demande estimé pour les produits clés (steaks/min)
     forecast_rates = {
         "STEAK_WHOPPER": 0.65,
         "STEAK_HAMB": 0.80,
@@ -130,6 +156,37 @@ def get_inventory():
     return {
         "inventory": summary,
         "potential_losses": losses,
+    }
+
+
+@app.get("/api/leader/dashboard")
+def get_leader_dashboard():
+    """Vue simplifiée pour le Shift Leader : feux tricolores, unités concrètes, sans pourcentages."""
+    forecast_rates = {
+        "STEAK_WHOPPER": 0.65,
+        "STEAK_HAMB": 0.80,
+        "STEAK_MASTER": 0.45,
+        "FRITES_SURGELEES": 0.50,
+    }
+    return {
+        "role": "shift_leader",
+        "cards": LIVE_INVENTORY.get_leader_view(forecast_rates),
+        "sanitary_banner": "RÈGLE D'OR : Toute viande sortie du congélateur doit être cuite. Ne JAMAIS la recongeler.",
+    }
+
+
+@app.get("/api/manager/dashboard")
+def get_manager_dashboard():
+    """Vue analytique pour le Manager : valorisations en euros, pourcentages de perte et marges."""
+    forecast_rates = {
+        "STEAK_WHOPPER": 0.65,
+        "STEAK_HAMB": 0.80,
+        "STEAK_MASTER": 0.45,
+        "FRITES_SURGELEES": 0.50,
+    }
+    return {
+        "role": "manager",
+        "analytics": LIVE_INVENTORY.get_manager_view(forecast_rates),
     }
 
 

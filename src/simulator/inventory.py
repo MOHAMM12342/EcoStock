@@ -296,6 +296,125 @@ class InventoryManager:
 
         return results
 
+    def get_leader_view(self, forecast_demand_per_min: Dict[str, float]) -> List[Dict]:
+        """Vue ultra-simplifiée pour le Shift Leader : feux tricolores, unités concrètes, aucune formule."""
+        losses = self.calculate_potential_losses(forecast_demand_per_min)
+        view: List[Dict] = []
+
+        for sku, state in self.items.items():
+            cfg = INVENTORY_ITEMS[sku]
+            loss_info = losses.get(sku, {})
+            prep_q = state.prep_stock_total
+            freezer_q = state.freezer_stock
+            earliest_exp = loss_info.get("earliest_expiry_min")
+
+            # Détermination du feu tricolore opérationnel
+            if prep_q <= 6 or (earliest_exp is not None and earliest_exp <= 5):
+                color = "RED"
+                badge = "🔴 ACTION REQUISE"
+                if prep_q <= 6:
+                    msg = f"Stock bas : Sortir 1 boîte de {cfg.name} maintenant !"
+                else:
+                    msg = f"Alerte : Cuire sous {earliest_exp} min sinon le lot sera perdu !"
+                urgency = 2
+            elif prep_q <= 15 or (earliest_exp is not None and earliest_exp <= 15):
+                color = "YELLOW"
+                badge = "🟡 ATTENTION"
+                msg = f"Prévoir 1 boîte de réserve sous 10 minutes."
+                urgency = 1
+            else:
+                color = "GREEN"
+                badge = "🟢 STOCK OK"
+                msg = f"Stock prêt suffisant pour le service actuel."
+                urgency = 0
+
+            # Quantité de boîte standard pour action rapide en 1 clic
+            pack_size = 12 if "WHOPPER" in sku else (15 if "HAMB" in sku else (10 if "MASTER" in sku else (2 if "GLACE" in sku else 1)))
+
+            view.append({
+                "sku": sku,
+                "name": cfg.name,
+                "traffic_light": color,
+                "status_badge": badge,
+                "action_message": msg,
+                "prep_stock_text": f"{prep_q} {cfg.unit} prêts",
+                "freezer_stock_text": f"{freezer_q} {cfg.unit} en réserve",
+                "earliest_expiry_min": earliest_exp,
+                "quick_action_qty": pack_size,
+                "quick_action_label": f"+1 Boîte ({pack_size} {cfg.unit})",
+                "can_return": cfg.can_return_to_freezer,
+                "sanitary_rule_text": (
+                    "Excédent réintégrable au congélateur en fin de journée."
+                    if cfg.can_return_to_freezer
+                    else "Ne JAMAIS remettre de viande au congélateur une fois sortie."
+                ),
+            })
+
+        view.sort(key=lambda x: x["traffic_light"] == "RED", reverse=True)
+        return view
+
+    def get_manager_view(self, forecast_demand_per_min: Dict[str, float]) -> Dict:
+        """Vue analytique pour le Manager : pourcentages, valorisation financière (€) et indicateurs de pilotage."""
+        losses = self.calculate_potential_losses(forecast_demand_per_min)
+        total_freezer_val = 0.0
+        total_prep_val = 0.0
+        total_potential_loss_val = 0.0
+        total_wasted_val = 0.0
+        total_checked_out_val = 0.0
+
+        items_analytics: List[Dict] = []
+
+        for sku, state in self.items.items():
+            cfg = INVENTORY_ITEMS[sku]
+            cost = cfg.unit_cost_euros
+            loss_info = losses.get(sku, {})
+
+            freezer_val = round(state.freezer_stock * cost, 2)
+            prep_val = round(state.prep_stock_total * cost, 2)
+            wasted_val = round(state.wasted_count * cost, 2)
+            pot_loss_val = float(loss_info.get("potential_loss_euros", 0.0))
+
+            total_freezer_val += freezer_val
+            total_prep_val += prep_val
+            total_wasted_val += wasted_val
+            total_potential_loss_val += pot_loss_val
+
+            # Taux de perte sur stock engagé (%)
+            total_engaged = state.prep_stock_total + state.wasted_count
+            waste_rate_pct = round((state.wasted_count / total_engaged * 100), 2) if total_engaged > 0 else 0.0
+
+            items_analytics.append({
+                "sku": sku,
+                "name": cfg.name,
+                "category": cfg.category.value,
+                "unit_cost_euros": cost,
+                "freezer_stock": state.freezer_stock,
+                "freezer_val_euros": freezer_val,
+                "prep_stock": state.prep_stock_total,
+                "prep_val_euros": prep_val,
+                "total_stock_val_euros": round(freezer_val + prep_val, 2),
+                "wasted_count": state.wasted_count,
+                "wasted_val_euros": wasted_val,
+                "waste_rate_pct": waste_rate_pct,
+                "potential_loss_qty": loss_info.get("potential_loss_qty", 0),
+                "potential_loss_euros": pot_loss_val,
+                "status": loss_info.get("status", "OK"),
+            })
+
+        total_stock_val = round(total_freezer_val + total_prep_val, 2)
+        global_waste_rate_pct = round((total_wasted_val / (total_prep_val + total_wasted_val) * 100), 2) if (total_prep_val + total_wasted_val) > 0 else 0.0
+
+        return {
+            "total_stock_valuation_euros": total_stock_val,
+            "freezer_valuation_euros": round(total_freezer_val, 2),
+            "prep_valuation_euros": round(total_prep_val, 2),
+            "potential_loss_total_euros": round(total_potential_loss_val, 2),
+            "wasted_total_cost_euros": round(total_wasted_val, 2),
+            "global_waste_rate_pct": global_waste_rate_pct,
+            "target_max_waste_rate_pct": 3.50,  # Objectif de chaîne fast-food
+            "items": items_analytics,
+        }
+
     def get_summary_report(self) -> List[Dict]:
         """Génère le rapport d'inventaire complet pour le tableau de bord manager."""
         report: List[Dict] = []

@@ -52,3 +52,48 @@ def test_api_inventory_adjust(client):
     assert res.status_code == 200
     assert res.json()["success"] is True
 
+
+def test_api_leader_dashboard(client):
+    res = client.get("/api/leader/dashboard")
+    assert res.status_code == 200
+    data = res.json()
+    assert data["role"] == "shift_leader"
+    assert "cards" in data
+    # Doit contenir des feux tricolores simples (GREEN, YELLOW, RED) et des messages sans formule
+    for card in data["cards"]:
+        assert card["traffic_light"] in ("GREEN", "YELLOW", "RED")
+        assert "quick_action_qty" in card
+
+
+def test_api_manager_dashboard(client):
+    res = client.get("/api/manager/dashboard")
+    assert res.status_code == 200
+    data = res.json()
+    assert data["role"] == "manager"
+    analytics = data["analytics"]
+    assert "total_stock_valuation_euros" in analytics
+    assert "global_waste_rate_pct" in analytics
+    assert "target_max_waste_rate_pct" in analytics
+
+
+def test_api_forecast(client):
+    res = client.get("/api/forecast")
+    assert res.status_code == 200
+    data = res.json()
+    assert "predictions_by_horizon" in data
+    assert "Whopper" in data["predictions_by_horizon"]
+    assert "Hamb" in data["predictions_by_horizon"]
+    assert "Master" in data["predictions_by_horizon"]
+    assert len(data["predictions_by_horizon"]["Whopper"]) == 5
+
+
+def test_api_forecast_model_info(client):
+    res = client.get("/api/forecast/model-info")
+    assert res.status_code == 200
+    data = res.json()
+    assert data["model_file"] == "forecast.pt"
+    assert data["class_name"] == "ForecastTrees"
+    assert data["num_trees"] == 315
+    assert data["input_features"] == 61
+
+
