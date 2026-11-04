@@ -41,8 +41,8 @@ main{position:relative;padding:0 clamp(16px,4vw,64px) 120px}
 .rn{position:relative;display:inline-block;overflow:hidden;height:1.2em;min-width:1.6ch;vertical-align:bottom}
 h1{font:400 clamp(2.2rem,5vw,4rem)/1.05 'Anton',Impact,sans-serif;text-transform:uppercase;margin:14px 0 8px}
 .hero p{max-width:34rem}.hero .why{color:var(--dim);margin:14px 0 24px;border-top:2px solid var(--line);padding-top:14px}
-.act{display:flex;flex-wrap:wrap;gap:14px}
-.act button{font:400 1.9rem 'Anton',Impact,sans-serif;letter-spacing:.1em;text-transform:uppercase;padding:18px 40px;border-radius:6px;transition:transform .12s,opacity .3s,border-color .2s,color .2s}
+.act{display:flex;flex-wrap:wrap;gap:12px;margin-top:4px}
+.act button{font:400 1.6rem 'Anton',Impact,sans-serif;letter-spacing:.08em;text-transform:uppercase;padding:16px 32px;border-radius:8px;transition:transform .12s,opacity .3s,border-color .2s,color .2s;width:100%}
 .act button:active:not(:disabled){transform:scale(.95)}
 .act button:disabled{opacity:.3;cursor:not-allowed}
 .pri{color:var(--on);background:linear-gradient(90deg,var(--saf) 50%,var(--ember) 50%) 100% 0/200% 100%;transition:background-position .45s,transform .12s,opacity .3s!important}
@@ -260,7 +260,8 @@ h1{font:400 clamp(2.2rem,5vw,4rem)/1.05 'Anton',Impact,sans-serif;text-transform
 /* ============================================================
    Styles Cuisine : KDS, Commandes & Bilan Steaks Sortants
    ============================================================ */
-.kds-bar{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-bottom:6px}
+.kds-bar{display:none}/* masqué — remplacé par kds-bar-simple */
+.kds-bar-simple{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;padding:8px 4px}
 .k-kpi-item{background:var(--surf);border:1.5px solid var(--line);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:14px;transition:box-shadow .3s,border-color .3s}
 .k-kpi-item.alert-orders{border-color:var(--saf);box-shadow:0 0 16px rgba(255,182,39,.25)}
 .k-kpi-icon{font-size:1.8rem;line-height:1}
@@ -290,12 +291,22 @@ h1{font:400 clamp(2.2rem,5vw,4rem)/1.05 'Anton',Impact,sans-serif;text-transform
 .kds-wait-pill.hot{color:var(--red);border-color:var(--red);background:rgba(229,56,59,.15)}
 .kds-ticket-lines{font-size:.86rem;color:var(--fg);font-family:'Space Grotesk',sans-serif}
 .kds-ticket-lines b{color:var(--saf)}
-.kds-btn-serve{padding:8px 16px;border-radius:8px;font:400 1.15rem 'Anton',Impact,sans-serif;letter-spacing:.05em;text-transform:uppercase;background:var(--ok);color:var(--on);border:0;cursor:pointer;transition:transform .12s,background-color .2s;white-space:nowrap}
+.kds-btn-serve{padding:12px 20px;border-radius:8px;font:400 1.3rem 'Anton',Impact,sans-serif;letter-spacing:.05em;text-transform:uppercase;background:var(--ok);color:var(--on);border:0;cursor:pointer;transition:transform .12s,background-color .2s;white-space:nowrap;min-width:160px}
 .kds-btn-serve:hover{background:#38b87d}
 .kds-btn-serve:active{transform:scale(.95)}
+.kds-btn-serve.ready{background:var(--ok);color:var(--on);box-shadow:0 0 10px rgba(46,158,107,.35)}
+.kds-btn-serve.ready:hover{background:#38b87d}
+.kds-btn-serve.waiting{background:var(--surf);color:var(--dim);border:1px solid var(--line);font-size:.82rem;font-weight:700}
+.kds-btn-serve.waiting:hover{background:rgba(229,56,59,.12);color:var(--red);border-color:var(--red)}
 
 /* Bilan des Steaks Sortants */
-.k-steaks-summary-card{background:var(--surf);border-radius:14px;border:1.5px solid var(--line);padding:20px}
+.k-steaks-summary-card{background:var(--surf);border-radius:14px;border:1.5px solid var(--line);padding:12px 16px}
+.k-steaks-grid{display:flex;flex-direction:column;gap:8px}
+.k-steak-tile{background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:10px 14px;display:flex;flex-direction:column;gap:8px}
+.k-steak-tile-compact{flex-direction:column;gap:8px}
+.k-tile-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.k-tile-icon-name{font:400 1.1rem 'Anton',Impact,sans-serif;letter-spacing:.04em;text-transform:uppercase;display:flex;align-items:center;gap:6px}
+.k-tile-icon-name b{font-weight:400}
 .k-summary-head{margin-bottom:14px}
 .k-summary-head h3{font:400 1.8rem 'Anton',Impact,sans-serif;letter-spacing:.05em;text-transform:uppercase;margin:0}
 .k-summary-head .sub{color:var(--dim);font-size:.82rem;margin-top:2px}
@@ -312,6 +323,21 @@ h1{font:400 clamp(2.2rem,5vw,4rem)/1.05 'Anton',Impact,sans-serif;text-transform
 .k-btn-grill{margin-top:6px;padding:7px 12px;border-radius:8px;border:1px solid rgba(234,163,39,.35);background:rgba(234,163,39,.1);color:var(--saf);font:700 .78rem 'JetBrains Mono',monospace;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s}
 .k-btn-grill:hover{background:var(--saf);color:var(--bg);border-color:var(--saf)}
 .k-btn-grill:active{transform:scale(.97)}
+
+/* Améliorations visuelles directes Cuisine */
+.hero-instruction{display:flex;background:rgba(255,90,31,.1);border:2px solid var(--ember);border-radius:10px;padding:14px 18px;margin-bottom:16px;gap:12px;align-items:flex-start;flex-direction:column}
+.hero-instruction.show{display:flex}
+.hero-instruction-badge{display:inline-block;background:var(--ember);color:var(--on);font:700 1.2rem 'Anton',Impact,sans-serif;letter-spacing:.05em;padding:8px 16px;border-radius:8px;text-transform:uppercase;white-space:nowrap;width:100%}
+.hero-instruction-txt{font:500 1.05rem 'Space Grotesk',sans-serif;color:var(--fg)}
+.hero-instruction-txt b{color:var(--fg);font-weight:700;font-size:1.1rem}
+.k-steak-tile.shortage{border-color:var(--red);box-shadow:0 0 16px rgba(229,56,59,.25)}
+.k-steak-tile.surplus{border-color:rgba(46,158,107,.4)}
+.k-btn-grill.urgent{background:var(--red);color:#fff;border-color:var(--red);animation:badge-pulse 1.4s infinite;font-weight:700}
+.k-btn-grill.urgent:hover{background:#ff4d4f}
+.k-balance-banner{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:8px;font-weight:700;font-size:.9rem}
+.k-balance-banner.ok{background:rgba(46,158,107,.18);color:var(--ok);border:1px solid rgba(46,158,107,.3)}
+.k-balance-banner.warn{background:rgba(229,56,59,.18);color:var(--red);border:1.5px solid var(--red);animation:badge-pulse 1.6s infinite}
+.kds-ticket-item.urgent-5m{border-color:var(--red);background:rgba(229,56,59,.18);animation:red-card-glow 1.5s infinite}
 
 /* Styles pour l'écran Manager */
 .mgr-wrap{max-width:76rem;display:grid;gap:22px}
@@ -333,52 +359,20 @@ h1{font:400 clamp(2.2rem,5vw,4rem)/1.05 'Anton',Impact,sans-serif;text-transform
 <div class="glow" id="glow"></div>
 <header>
   <div class="logo"><i></i>Braise</div>
-  <div class="clock" id="clock">11:30</div>
+  <div class="clock" id="clock">11:30:00</div>
   <nav aria-label="Vues"><button data-v="cuisine" aria-pressed="true">Cuisine</button><button data-v="leader" aria-pressed="false">Leader (Terrain)</button><button data-v="manager" aria-pressed="false">Manager (Pilotage)</button><button data-v="bilan" aria-pressed="false">Bilan 30m</button></nav>
   <div class="st" id="st"><b></b><span id="stt">Caisse synchronisée</span></div>
 </header>
 <div class="banner" id="bn" role="alert">Caisse déconnectée : plus de ventes en direct. L’agent applique la règle fixe (6 steaks quand le stock passe sous 6).</div>
 <main>
   <section class="view on" id="v-cuisine">
-    <!-- Bandeau KDS Synthèse Cuisine -->
-    <div class="kds-bar">
-      <div class="k-kpi-item" id="k-kpi-orders-box">
-        <div class="k-kpi-icon">🛎️</div>
-        <div>
-          <div class="k-kpi-val" id="k-orders-val">3 COMMANDES</div>
-          <div class="k-kpi-lbl" id="k-orders-sub">5 burgers en attente de dressage</div>
-        </div>
-      </div>
-      <div class="k-kpi-item">
-        <div class="k-kpi-icon">🔥</div>
-        <div>
-          <div class="k-kpi-val" id="k-steaks-cooked-val" style="color:var(--ok)">24 CUITS</div>
-          <div class="k-kpi-lbl">Chauds au bac (&lt; 15 min de vie)</div>
-        </div>
-      </div>
-      <div class="k-kpi-item">
-        <div class="k-kpi-icon">⏳</div>
-        <div>
-          <div class="k-kpi-val" id="k-steaks-cooking-val" style="color:var(--saf)">12 EN CUISSON</div>
-          <div class="k-kpi-lbl">Sur la grille du grill</div>
-        </div>
-      </div>
-      <div class="k-kpi-item">
-        <div class="k-kpi-icon">🥩</div>
-        <div>
-          <div class="k-kpi-val" id="k-steaks-uncooked-val" style="color:var(--ember)">72 PAS CUITS</div>
-          <div class="k-kpi-lbl">En passe décongelés (prêts à griller)</div>
-        </div>
-      </div>
-      <div class="k-kpi-item k-kpi-action">
-        <button class="k-btn-add-order" onclick="addMockCustomerOrder()">
-          <span>+</span>
-          <div>
-            <b>NOUVELLE COMMANDE</b>
-            <small>Simuler ticket caisse</small>
-          </div>
-        </button>
-      </div>
+    <!-- Alerte globale + bouton Nouvelle commande -->
+    <div class="kds-bar-simple">
+      <div id="k-global-alert"></div>
+      <button class="k-btn-add-order" onclick="addMockCustomerOrder()">
+        <span>+</span>
+        <div><b>NOUVELLE COMMANDE</b><small>Simuler ticket caisse</small></div>
+      </button>
     </div>
 
     <!-- Grille principale Cuisine -->
@@ -386,12 +380,11 @@ h1{font:400 clamp(2.2rem,5vw,4rem)/1.05 'Anton',Impact,sans-serif;text-transform
       <!-- Colonne gauche : Action recommandée + Tickets KDS -->
       <div>
         <div class="hero" id="hero">
-          <p class="lab">Action recommandée</p>
-          <span class="num" id="num" aria-live="polite"></span>
-          <h1 id="ht">Steaks</h1>
-          <p id="hs"></p>
-          <p class="why" id="hw"></p>
-          <div class="act"><button class="pri" id="ok" title="Entrée">Valider</button><button class="sec" id="no" title="Échap">Ignorer</button></div>
+          <div class="hero-instruction show" id="hero-inst">
+            <span class="hero-instruction-badge" id="hero-inst-badge">🟢 Grill OK</span>
+            <div class="hero-instruction-txt" id="hero-inst-txt">Le bac est couvert — rien à lancer pour l'instant</div>
+          </div>
+          <div class="act"><button class="pri" id="ok" title="Entrée">Grill libre</button><button class="sec" id="no" title="Échap">Ignorer</button></div>
         </div>
 
         <!-- File des tickets KDS en attente de dressage -->
@@ -411,21 +404,14 @@ h1{font:400 clamp(2.2rem,5vw,4rem)/1.05 'Anton',Impact,sans-serif;text-transform
       <div>
         <div class="bin" id="bin">
           <h2>Bac de maintien</h2>
-          <p class="sub">Durée de vie maximale : 15 min. Un lot rouge est bientôt à jeter, un lot en pointillés est en cuisson.</p>
           <div id="rows"></div>
         </div>
 
         <!-- Bilan des Steaks Sortants : Cuits vs Pas Cuits vs Demandés -->
         <div class="k-steaks-summary-card" style="margin-top:20px">
-          <div class="k-summary-head">
-            <h3>Bilan des Steaks Sortants</h3>
-            <p class="sub">État par burger : Commandes demandées vs Steaks cuits et pas cuits</p>
-          </div>
           <div class="k-steaks-grid" id="k-steaks-grid"></div>
         </div>
 
-        <!-- model-tag relocated to steaks summary header -->
-        <small id="model-tag" style="display:inline-block;margin-top:8px;padding:2px 8px;border-radius:4px;background:rgba(255,90,31,.12);color:var(--ember);font:700 .70rem 'JetBrains Mono',monospace">🧠 Modèle : LightGBM Poisson</small>
       </div>
     </div>
   </section>
@@ -578,12 +564,12 @@ h1{font:400 clamp(2.2rem,5vw,4rem)/1.05 'Anton',Impact,sans-serif;text-transform
   </section>
 </main>
 <div class="dock" role="toolbar" aria-label="Simulation">
-  <button class="chip" data-s="1" aria-pressed="true">×1</button><button class="chip" data-s="5" aria-pressed="false">×5</button><button class="chip" data-s="20" aria-pressed="false">×20</button>
+  <button class="chip" data-s="1" aria-pressed="true">⏱️ Temps réel (1s/s)</button><button class="chip" data-s="60" aria-pressed="false">⚡ ×60</button><button class="chip" data-s="300" aria-pressed="false">⏩ ×300</button>
   <button class="chip" id="pz" aria-pressed="false">Pause</button>
-  <button class="chip" id="au" aria-pressed="false">Mode auto</button>
-  <button class="chip" id="sg">Coup de feu</button>
-  <button class="chip" id="of" aria-pressed="false">Couper la caisse</button>
-  <button class="chip" id="th">Thème</button>
+  <button class="chip" id="au" aria-pressed="false">🤖 Auto</button>
+  <button class="chip" id="sg">🔥 Coup de feu</button>
+  <button class="chip dock-secondary" id="of" aria-pressed="false">Couper caisse</button>
+  <button class="chip dock-secondary" id="th">Thème</button>
 </div>
 <div class="inv-modal" id="inv-modal">
   <div class="modal-box">
@@ -597,6 +583,7 @@ h1{font:400 clamp(2.2rem,5vw,4rem)/1.05 'Anton',Impact,sans-serif;text-transform
           <option value="STEAK_MASTER">Steaks Master (Viande - Limite stricte)</option>
           <option value="MIX_GLACE">Bacs Glace Vanille (Réintégrable)</option>
           <option value="FRITES_SURGELEES">Sachets Frites 2.5kg</option>
+          <option value="PAINS_BUNS">Pains Burgers (Buns - Stock ambiant)</option>
         </select>
       </label>
       <label id="lbl-modal-qty">Quantité
@@ -626,7 +613,8 @@ const lamB=t=>.9+3.4*gs(t,765,55)+3*gs(t,1280,50)+(t>1140&&t<1230?.6:0);
 const pct=f=>(f>=1?'+':'−')+Math.abs(Math.round((f-1)*100))+' %';
 const HOLD=15;
 const PR=[{n:'Whopper',s:2,c:6,w:.34,p:8,sku:'STEAK_WHOPPER'},{n:'Hamb',s:1,c:4,w:.42,p:5,sku:'STEAK_HAMB'},{n:'Master',s:3,c:8,w:.24,p:10,sku:'STEAK_MASTER'}];
-let T=690,surge=1,surgeEnd=0,speed=1,paused=false,auto=false,off=false,uid=0,unmet=0,cur=null,autoWait=0,lastW=0,view='cuisine';
+const initNow = new Date();
+let T = initNow.getHours() * 60 + initNow.getMinutes(), sec = initNow.getSeconds(), surge = 1, surgeEnd = 0, speed = 1, paused = false, auto = false, off = false, uid = 0, unmet = 0, cur = null, autoWait = 0, lastW = 0, view = 'cuisine';
 let orderCounter=1040;
 let kitchenOrders=[
   {id:1041,age:2,items:[{n:'Whopper',q:2,s:2}],burgers:2,steaks:4},
@@ -655,62 +643,71 @@ function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clea
 const rows=S.map(p=>{const r=document.createElement('div');r.className='row';r.innerHTML=`<b>${p.n}</b><span class="rn"></span><div class="track"></div>`;$('#rows').appendChild(r);return{tot:r.querySelector('.rn'),track:r.querySelector('.track')}});
 
 function tick(){
-  T++;if(surge>1&&T>surgeEnd)surge=1;const st=P_(T);
+  sec++;
+  if(sec >= 60){
+    sec = 0;
+    T++;if(surge>1&&T>surgeEnd)surge=1;const st=P_(T);
 
-  // Vieillissement de l'inventaire en préparation et élimination des lots expirés hors congélateur
-  Object.values(INV.items).forEach(it => {
-    it.p.forEach(b => b.a++);
-    it.p = it.p.filter(b => {
-      if(b.max && b.a >= b.max){
-        INV.wastedRaw += b.q;
-        toast(`Périmé hors froid : ${b.q} ${it.u} de ${it.n} jetés !`);
-        return false;
+    // Vieillissement de l'inventaire en préparation et élimination des lots expirés hors congélateur
+    Object.values(INV.items).forEach(it => {
+      it.p.forEach(b => b.a++);
+      it.p = it.p.filter(b => {
+        if(b.max && b.a >= b.max){
+          INV.wastedRaw += b.q;
+          toast(`Périmé hors froid : ${b.q} ${it.u} de ${it.n} jetés !`);
+          return false;
+        }
+        return true;
+      });
+    });
+
+    // Vieillissement des tickets KDS en attente
+    kitchenOrders.forEach(ord => ord.age++);
+
+    // Arrivée réaliste de nouvelles commandes de caisse
+    if(!off && kitchenOrders.length < 8){
+      const orderChance = 0.35 * (surge > 1 ? 1.7 : 1.0) * Math.min(1.4, lamB(T) / 2.2);
+      if(Math.random() < orderChance){
+        nextOrderId++;
+        const r = Math.random();
+        let itms = [];
+        if(r < 0.4) itms = [{n:'Whopper', q:1 + (Math.random() > 0.6 ? 1 : 0), s:2}];
+        else if(r < 0.7) itms = [{n:'Hamb', q:1 + (Math.random() > 0.5 ? 2 : 1), s:1}];
+        else itms = [{n:'Master', q:1, s:3}, {n:'Whopper', q:1, s:2}];
+        const bCount = itms.reduce((a, x) => a + x.q, 0);
+        const sCount = itms.reduce((a, x) => a + (x.q * x.s), 0);
+        kitchenOrders.push({id:nextOrderId, age:0, items:itms, burgers:bCount, steaks:sCount});
       }
-      return true;
-    });
-  });
-
-  // Vieillissement des tickets KDS en attente
-  kitchenOrders.forEach(ord => ord.age++);
-
-  // Arrivée réaliste de nouvelles commandes de caisse
-  if(!off && kitchenOrders.length < 8){
-    const orderChance = 0.35 * (surge > 1 ? 1.7 : 1.0) * Math.min(1.4, lamB(T) / 2.2);
-    if(Math.random() < orderChance){
-      nextOrderId++;
-      const r = Math.random();
-      let itms = [];
-      if(r < 0.4) itms = [{n:'Whopper', q:1 + (Math.random() > 0.6 ? 1 : 0), s:2}];
-      else if(r < 0.7) itms = [{n:'Hamb', q:1 + (Math.random() > 0.5 ? 2 : 1), s:1}];
-      else itms = [{n:'Master', q:1, s:3}, {n:'Whopper', q:1, s:2}];
-      const bCount = itms.reduce((a, x) => a + x.q, 0);
-      const sCount = itms.reduce((a, x) => a + (x.q * x.s), 0);
-      kitchenOrders.push({id:nextOrderId, age:0, items:itms, burgers:bCount, steaks:sCount});
     }
-  }
 
-  // Traitement automatique en mode auto si des steaks cuits sont prêts
-  if(auto && kitchenOrders.length > 0){
-    const oldest = kitchenOrders[0];
-    const canServe = oldest.items.every(it => {
-      const p = S.find(prod => prod.n === it.n);
-      return p && sum(p.bin, 'q') >= (it.q * it.s);
-    });
-    if(canServe){
-      serveKitchenTicket(oldest.id);
+    // Traitement automatique en mode auto si des steaks cuits sont prêts
+    if(auto && kitchenOrders.length > 0){
+      const oldest = kitchenOrders[0];
+      const canServe = oldest.items.every(it => {
+        const p = S.find(prod => prod.n === it.n);
+        return p && sum(p.bin, 'q') >= (it.q * it.s);
+      });
+      if(canServe){
+        serveKitchenTicket(oldest.id);
+      }
     }
-  }
 
-  S.forEach(p=>{
-    p.bin.forEach(l=>l.age++);
-    const eb=lamB(T)*p.w*p.s,d=poi(lamB(T)*surge*p.w)*p.s;
-    p.act.push(d);p.pre.push(eb);p.act.shift();p.pre.shift();st.pred+=eb;st.act+=d;
-    let need=d;for(const l of p.bin){const k=Math.min(l.q,need);l.q-=k;need-=k;st.used+=k}
-    st.ca+=(d-need)/p.s*p.p;unmet+=need/p.s;
-    p.bin=p.bin.filter(l=>{if(l.q<=0)return false;if(l.age>=HOLD){st.waste+=l.q;p.gone[l.id]=1;return false}return true});
-    p.ck.forEach(c=>c.left--);p.ck.filter(c=>c.left<=0).forEach(c=>p.bin.push({id:c.id,q:c.q,age:0}));p.ck=p.ck.filter(c=>c.left>0);
-  });
-  decide();render();
+    S.forEach(p=>{
+      p.bin.forEach(l=>l.age++);
+      const eb=lamB(T)*p.w*p.s,d=poi(lamB(T)*surge*p.w)*p.s;
+      p.act.push(d);p.pre.push(eb);p.act.shift();p.pre.shift();st.pred+=eb;st.act+=d;
+      let need=d;for(const l of p.bin){const k=Math.min(l.q,need);l.q-=k;need-=k;st.used+=k}
+      st.ca+=(d-need)/p.s*p.p;unmet+=need/p.s;
+      p.bin=p.bin.filter(l=>{if(l.q<=0)return false;if(l.age>=HOLD){st.waste+=l.q;p.gone[l.id]=1;return false}return true});
+      p.ck.forEach(c=>c.left--);p.ck.filter(c=>c.left<=0).forEach(c=>p.bin.push({id:c.id,q:c.q,age:0}));p.ck=p.ck.filter(c=>c.left>0);
+    });
+    decide();
+    render();
+  } else {
+    // Mise à jour de l'horloge uniquement (sans reconstruire le DOM)
+    const cl = $('#clock');
+    if(cl) cl.textContent = fmt(T) + ':' + String(sec).padStart(2,'0');
+  }
 }
 function decide(){
   let best=null;
@@ -748,12 +745,36 @@ function launch(){
 }
 function ignore(){if(!cur)return;S[cur.i].snooze=T+4;toast(`Ignoré pour 4 min : ${S[cur.i].n}`);cur=null;decide();render()}
 function render(){
-  $('#clock').textContent=fmt(T);
+  $('#clock').textContent=fmt(T)+':'+String(sec).padStart(2,'0');
   $('#glow').style.opacity=.1+.38*clamp(lamB(T)*surge/4,0,1);
   const h=$('#hero');
-  if(cur){const p=S[cur.i];h.classList.remove('calm');roll($('#num'),String(cur.q));$('#ht').textContent='Steaks '+p.n;$('#hs').textContent=`À lancer avant ${fmt(T+2)} · cuisson ${p.c} min`;
-    $('#hw').textContent=off?'Règle fixe : le stock de ce produit est passé sous 6 steaks.':`Demande attendue : ${Math.round(cur.mean)} steaks d’ici ${cur.m} min, ${cur.sup} déjà prêts ou en cuisson. Tendance des 15 dernières minutes : ${pct(fac(p))}.`}
-  else{h.classList.add('calm');roll($('#num'),'0');$('#ht').textContent='Rien à lancer';$('#hs').textContent='Le bac couvre les prochaines minutes.';$('#hw').textContent='L’agent surveille les ventes et vous prévient dès qu’un produit risque de manquer.'}
+  const heroInst=$('#hero-inst');
+  const heroBadge=$('#hero-inst-badge');
+  const heroTxt=$('#hero-inst-txt');
+  if(cur){
+    const p=S[cur.i];
+    h.classList.remove('calm');
+    if(heroInst) heroInst.classList.add('show');
+    if(heroBadge){heroBadge.textContent=`🔥 CUIRE ${cur.q} ${p.n.toUpperCase()}`;heroBadge.style.background='';}
+    if(heroTxt) heroTxt.innerHTML=`Mettre <b>${cur.q} steaks</b> sur la grille · Cuisson <b>${p.c} min</b> → prêts à <b>${fmt(T+p.c)}</b>`;
+    $('#ok').textContent=`🔥 METTRE SUR LA GRILLE (${cur.q})`;
+    $('#no').textContent='Passer (Échap)';
+  } else {
+    h.classList.add('calm');
+    if(heroInst) heroInst.classList.add('show');
+    if(heroBadge){heroBadge.textContent='🟢 Grill OK';heroBadge.style.background='var(--ok)';}
+    if(heroTxt) heroTxt.textContent="Le bac est couvert \u2014 rien \xe0 lancer pour l'instant.";
+    $('#ok').textContent='Grill libre';
+    $('#no').textContent='Ignorer';
+  }
+  // Alerte globale rupture dans la barre sup
+  const globalAlert=$('#k-global-alert');
+  if(globalAlert){
+    const ruptures=S.filter(p=>{const dem=kitchenOrders.reduce((a,o)=>{const it=o.items.find(x=>x.n===p.n);return a+(it?it.q*(it.s||p.s):0)},0);return sum(p.bin,'q')<dem;});
+    if(ruptures.length>0) globalAlert.innerHTML=`<span style="color:var(--red);font-weight:700;font-size:.82rem">🚨 RUPTURE : ${ruptures.map(p=>p.n).join(' · ')}</span>`;
+    else if(kitchenOrders.length>0) globalAlert.innerHTML=`<span style="color:var(--ok);font-size:.82rem;font-weight:700">✅ ${kitchenOrders.length} commande${kitchenOrders.length>1?'s':''} en attente</span>`;
+    else globalAlert.innerHTML='';
+  }
   $('#ok').disabled=$('#no').disabled=!cur;
   S.forEach((p,i)=>{const r=rows[i];roll(r.tot,String(sum(p.bin,'q')));const live=new Set();
     [...p.bin.map(l=>({id:l.id,q:l.q,left:HOLD-l.age,ck:0})),...p.ck.map(c=>({id:c.id,q:c.q,left:c.left,ck:1}))].forEach(l=>{const k='b'+l.id;live.add(k);
@@ -907,42 +928,17 @@ function renderCuisineKDS(){
     const raw = sum(INV.items[p.sku]?.p || [], 'q');
     const balance = ckd - dem;
     const isCovered = balance >= 0;
+    const grillQty = Math.max(p.s * 2, Math.abs(balance));
 
     const tile = document.createElement('div');
-    tile.className = 'k-steak-tile';
+    tile.className = 'k-steak-tile k-steak-tile-compact' + (isCovered ? '' : ' shortage');
     tile.innerHTML = `
-      <div class="k-tile-head">
-        <div class="k-tile-title">
-          <span>${meta.icon}</span>
-          <div>
-            <div>${p.n}</div>
-            <div style="font-size:.72rem;color:var(--dim);font-family:'Space Grotesk',sans-serif;font-weight:400;text-transform:none">${meta.subtitle}</div>
-          </div>
-        </div>
-        <span class="k-tile-cov ${isCovered ? 'ok' : 'warn'}">
-          ${isCovered ? `COUVERT (+${balance})` : `MANQUE ${Math.abs(balance)} ⚠️`}
-        </span>
+      <div class="k-tile-row">
+        <span class="k-tile-icon-name">${meta.icon} <b>${p.n}</b></span>
+        <span class="k-tile-cov ${isCovered ? 'ok' : 'warn'}">${isCovered ? '+' + balance : '🚨 −' + Math.abs(balance)}</span>
       </div>
-      <div class="k-tile-metrics">
-        <div class="k-m-col">
-          <small>Demande</small>
-          <b style="color:${dem > 0 ? 'var(--fg)' : 'var(--dim)'}">${dem}</b>
-        </div>
-        <div class="k-m-col">
-          <small>Cuits</small>
-          <b style="color:${ckd >= dem ? 'var(--ok)' : 'var(--red)'}">${ckd}</b>
-        </div>
-        <div class="k-m-col">
-          <small>Grill</small>
-          <b style="color:var(--saf)">${ing}</b>
-        </div>
-        <div class="k-m-col">
-          <small>Pas cuits</small>
-          <b style="color:var(--ember)">${raw}</b>
-        </div>
-      </div>
-      <button class="k-btn-grill" onclick="quickGrillProduct('${p.sku}', ${p.s * 2})">
-        🔥 Lancer cuisson (+${p.s * 2} steaks)
+      <button class="k-btn-grill ${isCovered ? '' : 'urgent'}" onclick="quickGrillProduct('${p.sku}', ${grillQty})">
+        ${isCovered ? '🔥 Cuire +' + (p.s * 2) : '🚨 CUIRE +' + grillQty + ' MAINTENANT'}
       </button>
     `;
     steaksGrid.appendChild(tile);
@@ -967,6 +963,18 @@ function renderCuisineKDS(){
         return acc + it.q * (prod ? prod.s : (it.s || 1));
       }, 0);
 
+      let canServe = true;
+      let missingReason = [];
+      ord.items.forEach(it => {
+        const prod = S.find(p => p.n === it.n);
+        const needed = it.q * (prod ? prod.s : (it.s || 1));
+        const avail = prod ? sum(prod.bin, 'q') : 0;
+        if(avail < needed){
+          canServe = false;
+          missingReason.push(`${needed - avail} ${it.n}`);
+        }
+      });
+
       const itemEl = document.createElement('div');
       itemEl.className = `kds-ticket-item ${isUrgent ? 'urgent' : ''}`;
       itemEl.innerHTML = `
@@ -977,8 +985,8 @@ function renderCuisineKDS(){
           </div>
           <div class="kds-ticket-lines">${linesTxt} <small style="color:var(--dim);font-family:'JetBrains Mono',monospace">(${totalSteaksInOrder} steaks)</small></div>
         </div>
-        <button class="kds-btn-serve" onclick="serveKitchenTicket(${ord.id})" title="Marquer assemblé et déduire les steaks du bac">
-          Servir
+        <button class="kds-btn-serve ${canServe ? 'ready' : 'waiting'}" onclick="serveKitchenTicket(${ord.id})" title="${canServe ? 'Tous les steaks sont prêts en bac !' : 'Steaks manquants : ' + missingReason.join(', ')}">
+          ${canServe ? '✅ PRÊT À SERVIR' : '⏳ Manque steaks'}
         </button>
       `;
       ticketsList.appendChild(itemEl);
@@ -1515,11 +1523,25 @@ $('#modal-confirm').onclick=()=>{
     const newP=+($('#modal-val-prep').value)||0;
     it.f=newF;
     it.p=[{id:++uid,q:newP,a:0,max:it.max}];
-    toast(`Inventaire ajusté pour ${it.n}`);
+    toast(`Inventaire ajusté pour ${it.n} (Congélateur: ${newF}, Préparation: ${newP})`);
+    fetch('/api/inventory/adjust', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({sku, freezer_stock: newF, prep_stock: newP})
+    }).catch(()=>{});
   }
   closeModal();
   if(view==='leader')renderLeader();
   if(view==='manager')renderManager();
+};
+
+$('#modal-sku').onchange=()=>{
+  const s=$('#modal-sku').value;
+  const it=INV.items[s];
+  if(modalMode==='adjust' && it){
+    $('#modal-val-freezer').value=it.f;
+    $('#modal-val-prep').value=sum(it.p,'q');
+  }
 };
 
 function loop(){if(!paused)tick();setTimeout(loop,1000/speed)}
@@ -1556,10 +1578,6 @@ tg('#of',v=>{off=v;$('#st').classList.toggle('bad',v);$('#stt').textContent=v?'C
 $('#sg').onclick=()=>{surge=2.2;surgeEnd=T+20;toast('Coup de feu imprévu : l’agent ajuste d’après les ventes')};
 $('#th').onclick=()=>{const r=document.documentElement,d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;r.dataset.theme=d?'light':'dark'};
 decide();render();
-fetch('/api/forecast/model-info').then(r=>r.json()).then(d=>{
-  const el=$('#model-tag');
-  if(el) el.textContent=`🧠 ${d.class_name} (${d.num_product_models} produits · ${d.inference_engine})`;
-}).catch(()=>{});
 setTimeout(()=>{document.body.classList.add('ready');loop()},1600);
 </script>
 </body>
