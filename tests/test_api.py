@@ -99,3 +99,13 @@ def test_api_forecast_model_info(client):
     assert data["inference_engine"] == "LightGBM"
 
 
+def test_api_forecast_daily_update(client):
+    res = client.post("/api/forecast/daily-update", json={"days_count": 1, "n_additional_trees": 5})
+    assert res.status_code == 200
+    data = res.json()
+    assert data["status"] == "success"
+    assert "trees_per_product" in data
+    assert data["trees_per_product"]["Whopper"] >= 150
+
+
+

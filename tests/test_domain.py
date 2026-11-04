@@ -186,3 +186,36 @@ def test_metrics_wape_and_bias():
     # Somme (pred - actual) = 2 - 2 + 3 = 3 => Biais = 3 / 60 = 0.05
     assert pytest.approx(bias, 0.001) == 3.0 / 60.0
 
+
+def test_demand_forecaster_save_load_and_daily_update(tmp_path):
+    """Vérifie la sérialisation des poids et l'entraînement continu de fin de journée."""
+    from src.data.generate import generate_30min_dataset
+    from src.forecast.model import DemandForecaster
+
+    # 1. Entraînement initial
+    df_init = generate_30min_dataset(days_count=3, seed=42)
+    forecaster = DemandForecaster().fit(df_init)
+    save_path = tmp_path / "forecaster_test.joblib"
+    forecaster.save(save_path)
+
+    assert save_path.exists()
+    assert save_path.stat().st_size > 0
+
+    # 2. Rechargement des poids sans ré-entraîner
+    loaded = DemandForecaster.load(save_path)
+    assert "Whopper" in loaded.models
+    initial_trees = loaded.models["Whopper"].booster_.num_trees()
+    assert initial_trees == 150
+
+    # 3. Entraînement continu sur les données d'une journée
+    df_daily = generate_30min_dataset(days_count=1, seed=99)
+    loaded.update_daily(df_daily, n_additional_trees=10, save_after=True, save_path=save_path)
+
+    # 4. Vérification de l'ajout d'arbres
+    reloaded = DemandForecaster.load(save_path)
+    updated_trees = reloaded.models["Whopper"].booster_.num_trees()
+    assert updated_trees == initial_trees + 10
+    assert reloaded.days_trained == 1
+    assert reloaded.last_trained_at is not None
+
+

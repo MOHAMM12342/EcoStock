@@ -17,7 +17,7 @@ import uvicorn
 from pydantic import BaseModel
 from src.data.generate import generate_30min_dataset
 from src.export.excel import export_journal_to_excel
-from src.forecast.model import DemandForecaster, set_global_forecaster
+from src.forecast.model import DEFAULT_MODEL_PATH, DemandForecaster, set_global_forecaster
 from src.policy.newsvendor import decide_fixed_policy, decide_newsvendor
 from src.simulator.inventory import InventoryManager
 from src.simulator.runner import simulate_day
@@ -57,15 +57,28 @@ class AdjustRequest(BaseModel):
     freezer_stock: Optional[int] = None
     prep_stock: Optional[int] = None
 
-# Initialisation lazy du modèle
+class DailyUpdateRequest(BaseModel):
+    days_count: Optional[int] = 1
+    n_additional_trees: Optional[int] = 15
+    learning_rate: Optional[float] = 0.05
+
+# Initialisation lazy du modèle avec persistance
 _FORECASTER = None
 
 
 def get_or_train_forecaster():
     global _FORECASTER
     if _FORECASTER is None:
+        if DEFAULT_MODEL_PATH.exists():
+            try:
+                _FORECASTER = DemandForecaster.load(DEFAULT_MODEL_PATH)
+                set_global_forecaster(_FORECASTER)
+                return _FORECASTER
+            except Exception:
+                pass
         df = generate_30min_dataset(days_count=90, seed=42)
         _FORECASTER = DemandForecaster().fit(df)
+        _FORECASTER.save(DEFAULT_MODEL_PATH)
         set_global_forecaster(_FORECASTER)
     return _FORECASTER
 
@@ -164,6 +177,37 @@ def get_forecast_model_info():
         "quantiles": ["q10", "q50", "q90"],
         "inference_engine": "LightGBM",
         "status": "ready",
+        "saved_model_path": str(DEFAULT_MODEL_PATH),
+        "days_trained": getattr(forecaster, "days_trained", 0),
+        "last_trained_at": getattr(forecaster, "last_trained_at", None),
+    }
+
+
+@app.post("/api/forecast/daily-update")
+def train_daily_update(payload: Optional[DailyUpdateRequest] = None):
+    """Entraînement continu de fin de journée sur les nouvelles données journalières.
+
+    Met à jour la baseline historique et ajoute de nouveaux arbres de boosting
+    LightGBM via init_model sans repartir de zéro, puis sauvegarde les poids sur disque.
+    """
+    days = payload.days_count if payload and payload.days_count else 1
+    n_trees = payload.n_additional_trees if payload and payload.n_additional_trees else 15
+    lr = payload.learning_rate if payload and payload.learning_rate else 0.05
+
+    forecaster = get_or_train_forecaster()
+    daily_df = generate_30min_dataset(days_count=days, seed=None)
+    forecaster.update_daily(daily_df, n_additional_trees=n_trees, learning_rate=lr, save_after=True)
+
+    return {
+        "status": "success",
+        "message": f"Entraînement continu terminé sur {days} jour(s). Poids sauvegardés dans {DEFAULT_MODEL_PATH}.",
+        "trees_per_product": {
+            p: m.booster_.num_trees()
+            for p, m in forecaster.models.items()
+            if hasattr(m, "booster_")
+        },
+        "days_trained": forecaster.days_trained,
+        "last_trained_at": forecaster.last_trained_at,
     }
 
 
