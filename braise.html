@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Braise — la passe</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F3E9D8;--surf:#E8DCC6;--line:#D2C3A8;--fg:#15100C;--dim:#6B5B4E;--ember:#FF5A1F;--saf:#FFB627;--red:#E5383B;--ok:#2E9E6B;--on:#15100C;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15100C;--surf:#241C16;--line:#3A2E25;--fg:#F3E9D8;--dim:#9A8B7A;--ok:#8EE3B8;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#15100C;--surf:#241C16;--line:#3A2E25;--fg:#F3E9D8;--dim:#9A8B7A;--ok:#8EE3B8;color-scheme:dark}
+*{box-sizing:border-box;margin:0}
+html{background:var(--bg);scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--fg);font:400 1rem/1.45 'Space Grotesk',system-ui,sans-serif;min-height:100%;overflow-x:hidden;transition:background-color .4s,color .4s}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:3px solid var(--saf);outline-offset:3px}
+.mono,.chip,.lot,.clock,.lab{font-family:'JetBrains Mono',ui-monospace,monospace}
+.glow{position:fixed;left:-18vw;top:12vh;width:60vw;height:60vw;max-width:760px;max-height:760px;border-radius:50%;background:var(--ember);filter:blur(130px);opacity:.2;pointer-events:none;transition:opacity 1.6s ease}
+header{position:relative;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;padding:20px clamp(16px,4vw,64px)}
+.logo{display:flex;align-items:center;gap:12px;font:400 1.9rem 'Anton',Impact,sans-serif;letter-spacing:.14em;text-transform:uppercase}
+.logo i{width:16px;height:16px;border-radius:4px;background:var(--ember);animation:breathe 3s ease-in-out infinite}
+.clock{font-size:1.6rem;font-weight:700;font-variant-numeric:tabular-nums}
+nav{display:flex;gap:6px}
+nav button{position:relative;padding:8px 16px;font-weight:500;color:var(--dim);transition:color .25s}
+nav button::after{content:"";position:absolute;left:16px;right:16px;bottom:2px;height:3px;border-radius:2px;background:var(--ember);transform:scaleX(0);transition:transform .35s cubic-bezier(.2,.9,.2,1)}
+nav button[aria-pressed=true]{color:var(--fg)}nav button[aria-pressed=true]::after{transform:scaleX(1)}
+.st{display:flex;align-items:center;gap:10px;font-size:.85rem;color:var(--dim)}
+.st b{width:11px;height:11px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 0 var(--ok);animation:ping 2.4s infinite}
+.st.bad b{background:var(--red);animation:none}.st.bad{color:var(--red)}
+.banner{max-height:0;overflow:hidden;margin:0 clamp(16px,4vw,64px);border-radius:8px;background:var(--red);color:#fff;padding:0 16px;transition:max-height .5s,padding .5s,margin .5s}
+.banner.on{max-height:90px;padding:12px 16px;margin-bottom:12px}
+main{position:relative;padding:0 clamp(16px,4vw,64px) 120px}
+.view{display:none}.view.on{display:grid;animation:vin .5s cubic-bezier(.2,.9,.2,1)}
+#v-cuisine{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(24px,5vw,72px);align-items:start}
+.lab{font-size:.85rem;color:var(--saf);letter-spacing:.06em}
+.num{position:relative;display:block;height:.88em;overflow:hidden;font:400 clamp(9rem,25vw,20rem)/1 'Anton',Impact,sans-serif;color:var(--ember);transition:color .5s}
+.calm .num{color:var(--line)}
+.num span,.rn span{position:absolute;left:0;top:0;animation:rin .55s cubic-bezier(.2,.9,.2,1) both}
+.num span.out,.rn span.out{animation:rout .45s ease-in both}
+.rn{position:relative;display:inline-block;overflow:hidden;height:1.2em;min-width:1.6ch;vertical-align:bottom}
+h1{font:400 clamp(2.2rem,5vw,4rem)/1.05 'Anton',Impact,sans-serif;text-transform:uppercase;margin:14px 0 8px}
+.hero p{max-width:34rem}.hero .why{color:var(--dim);margin:14px 0 24px;border-top:2px solid var(--line);padding-top:14px}
+.act{display:flex;flex-wrap:wrap;gap:14px}
+.act button{font:400 1.9rem 'Anton',Impact,sans-serif;letter-spacing:.1em;text-transform:uppercase;padding:18px 40px;border-radius:6px;transition:transform .12s,opacity .3s,border-color .2s,color .2s}
+.act button:active:not(:disabled){transform:scale(.95)}
+.act button:disabled{opacity:.3;cursor:not-allowed}
+.pri{color:var(--on);background:linear-gradient(90deg,var(--saf) 50%,var(--ember) 50%) 100% 0/200% 100%;transition:background-position .45s,transform .12s,opacity .3s!important}
+.pri:hover:not(:disabled){background-position:0 0}
+.sec{border:2px solid var(--dim);color:var(--dim)}.sec:hover:not(:disabled){border-color:var(--fg);color:var(--fg)}
+.bin h2,.bil h2{font:400 2.3rem 'Anton',Impact,sans-serif;letter-spacing:.06em;text-transform:uppercase}
+.bin .sub{color:var(--dim);font-size:.85rem;margin-bottom:18px}
+.row{display:grid;grid-template-columns:clamp(104px,14vw,200px) 3.2rem minmax(0,1fr);align-items:center;gap:14px;margin-bottom:14px}
+.row>b{font:400 clamp(1.8rem,3.4vw,3.2rem) 'Anton',Impact,sans-serif;text-transform:uppercase}
+.row .rn{font:700 1.9rem 'JetBrains Mono',monospace;color:var(--saf)}
+.track{display:flex;gap:6px;padding:6px;min-height:76px;background:var(--surf);border-radius:10px;overflow:hidden}
+.lot{--cell:clamp(24px,2.3vw,38px);flex:none;height:64px;width:calc(var(--q)*var(--cell));min-width:4.6rem;display:flex;align-items:center;justify-content:center;border-radius:6px;background:var(--ember);color:var(--on);font-size:.8rem;font-weight:700;white-space:nowrap;transform-origin:left;animation:lin .5s cubic-bezier(.2,.9,.2,1);transition:width .5s,background-color .8s,opacity .3s,transform .3s}
+.lot.b{background:var(--saf)}.lot.c{background:var(--red);color:#fff}
+.lot.ck{background:transparent;border:2px dashed var(--saf);color:var(--saf)}
+.lot.dead{animation:dead .7s forwards}.lot.gone{opacity:0;transform:scale(.8)}
+.cards{display:grid;grid-template-columns:3fr 2fr;gap:20px;margin-top:26px}
+.card{background:var(--surf);border-radius:14px;padding:24px;transition:box-shadow .4s}
+.card .lab{color:var(--dim)}
+.bars{display:flex;align-items:flex-end;gap:10px;height:150px;margin:16px 0 6px}
+.bar{flex:1;height:4%;background:var(--fg);opacity:.4;border-radius:5px;transition:height .7s cubic-bezier(.2,.9,.2,1)}.bar.f{background:var(--ember);opacity:1}
+.ax{display:flex;gap:10px;font-size:.7rem;color:var(--dim)}.ax span{flex:1;text-align:center}
+.loss{box-shadow:inset 0 0 0 2px var(--line)}.loss.hot{box-shadow:inset 0 0 0 2px var(--red)}.loss.hot .lab{color:var(--red)}
+.loss.pulse{animation:flash .9s}
+.loss .big{font:400 7rem/1 'Anton',Impact,sans-serif;color:var(--dim);height:1em;transition:color .4s}.loss.hot .big{color:var(--red)}
+.loss .big .rn{height:1em}
+.bil{max-width:62rem}
+.tot{display:flex;flex-wrap:wrap;gap:12px 40px;margin:16px 0 26px}.tot div{min-width:7rem}.tot b{display:block;font:400 3rem/1 'Anton',Impact,sans-serif}.tot small{color:var(--dim)}
+.per{display:grid;grid-template-columns:8.5rem minmax(0,1fr) 4.5rem 4.5rem;gap:14px;align-items:center;padding:12px 0;border-top:1px solid var(--line);animation:vin .5s both}
+.per .bx{display:flex;height:22px;background:var(--surf);border-radius:4px;overflow:hidden}.per .bx i{display:block;height:100%;width:0;transition:width .7s}.u{background:var(--ember)}.w{background:var(--red)}
+.per .mono{font-size:.85rem;text-align:right}
+.dock{position:fixed;left:0;right:0;bottom:0;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));background:var(--bg);border-top:1px solid var(--line);z-index:5}
+.chip{padding:8px 14px;border:1px solid var(--line);border-radius:99px;font-size:.78rem;transition:background-color .2s,border-color .2s,transform .12s}
+.chip:hover{border-color:var(--dim)}.chip:active{transform:scale(.94)}.chip[aria-pressed=true]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.toast{position:fixed;left:50%;bottom:84px;transform:translate(-50%,20px);background:var(--fg);color:var(--bg);padding:12px 20px;border-radius:8px;opacity:0;pointer-events:none;transition:.35s cubic-bezier(.2,.9,.2,1);z-index:9}.toast.on{opacity:1;transform:translate(-50%,0)}
+.boot{position:fixed;inset:0;z-index:20;background:var(--bg);display:flex;flex-direction:column;justify-content:center;gap:14px;padding:0 clamp(24px,10vw,160px);transition:opacity .6s .1s,visibility .7s}
+.ready .boot{opacity:0;visibility:hidden}
+.boot i{display:block;height:20px;border-radius:6px;background:linear-gradient(90deg,var(--surf) 30%,var(--line) 50%,var(--surf) 70%) 0 0/300% 100%;animation:shim 1.1s linear infinite}
+.boot i:nth-child(1){width:60%;height:120px}.boot i:nth-child(2){width:38%}.boot i:nth-child(3){width:72%}
+.boot p{color:var(--dim)}
+@keyframes rin{from{transform:translateY(100%)}}@keyframes rout{to{transform:translateY(-100%)}}
+@keyframes lin{from{transform:scaleX(0);opacity:0}}
+@keyframes dead{0%{}15%{transform:translateX(-5px)}30%{transform:translateX(5px)}100%{opacity:0;transform:scale(.6);filter:blur(5px)}}
+@keyframes vin{from{opacity:0;transform:translateX(24px)}}
+@keyframes flash{0%{box-shadow:inset 0 0 0 2px var(--red),0 0 0 0 var(--red)}40%{box-shadow:inset 0 0 0 2px var(--red),0 0 0 14px transparent;background:var(--red)}100%{}}
+@keyframes ping{70%{box-shadow:0 0 0 9px transparent}100%{box-shadow:0 0 0 0 transparent}}
+@keyframes breathe{50%{transform:scale(1.3) rotate(45deg)}}
+@keyframes shim{to{background-position:-300% 0}}
+.inv-wrap{max-width:76rem;display:grid;gap:20px}
+.inv-top{display:flex;flex-wrap:wrap;gap:14px 28px;align-items:center;justify-content:space-between;margin-bottom:8px}
+.inv-top h2{font:400 2.3rem 'Anton',Impact,sans-serif;letter-spacing:.06em;text-transform:uppercase}
+.inv-top .sub{color:var(--dim);font-size:.85rem}
+.inv-ctrls{display:flex;gap:10px;flex-wrap:wrap}
+.inv-btn{background:var(--surf);border:1px solid var(--line);border-radius:6px;padding:8px 16px;font:500 .85rem 'Space Grotesk',sans-serif;color:var(--fg);cursor:pointer;transition:background-color .2s,border-color .2s,transform .12s}
+.inv-btn:hover{border-color:var(--dim);background:var(--line)}.inv-btn:active{transform:scale(.96)}
+.inv-btn.pri{background:var(--ember);color:var(--on);font-weight:700;border:0}
+.inv-btn.pri:hover{background:var(--saf)}
+.inv-kpis{display:flex;flex-wrap:wrap;gap:12px 32px;margin:12px 0 20px;padding:16px 20px;background:var(--surf);border-radius:10px}
+.inv-kpis div{min-width:7rem}.inv-kpis b{display:block;font:400 2.2rem/1 'Anton',Impact,sans-serif}.inv-kpis small{color:var(--dim)}
+.inv-card{background:var(--surf);border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+.inv-table{width:100%;border-collapse:collapse;font-size:.85rem}
+.inv-table th{background:rgba(0,0,0,.15);padding:12px 16px;text-align:left;font-family:'JetBrains Mono',monospace;font-size:.76rem;letter-spacing:.05em;color:var(--dim);border-bottom:1px solid var(--line)}
+.inv-table td{padding:12px 16px;border-bottom:1px solid var(--line);vertical-align:middle}
+.inv-table tr:last-child td{border-bottom:0}
+.inv-tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.72rem;font-family:'JetBrains Mono',monospace;font-weight:700}
+.tag-meat{background:rgba(255,90,31,.18);color:var(--ember);border:1px solid rgba(255,90,31,.3)}
+.tag-ice{background:rgba(46,158,107,.18);color:var(--ok);border:1px solid rgba(46,158,107,.3)}
+.tag-side{background:rgba(255,182,39,.18);color:var(--saf);border:1px solid rgba(255,182,39,.3)}
+.badge-loss{background:rgba(229,56,59,.18);color:var(--red);font-weight:700;padding:2px 6px;border-radius:4px}
+.badge-ok{background:rgba(46,158,107,.18);color:var(--ok);font-weight:700;padding:2px 6px;border-radius:4px}
+.batch-pill{display:inline-block;padding:2px 6px;border-radius:4px;margin:2px;font-size:.72rem;font-family:'JetBrains Mono',monospace;background:var(--bg);border:1px solid var(--line)}
+.batch-pill.alert{border-color:var(--red);color:var(--red)}
+.batch-pill.warn{border-color:var(--saf);color:var(--saf)}
+.inv-modal{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;z-index:30;padding:20px}
+.inv-modal.on{display:flex}
+.modal-box{background:var(--bg);border:2px solid var(--line);border-radius:14px;padding:28px;max-width:500px;width:100%;box-shadow:0 24px 60px rgba(0,0,0,.4)}
+.modal-box h3{font:400 1.9rem 'Anton',Impact,sans-serif;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+.modal-box p{color:var(--dim);font-size:.85rem;margin-bottom:16px}
+.modal-form{display:grid;gap:14px}
+.modal-form label{font-size:.82rem;font-weight:500;color:var(--dim);display:grid;gap:6px}
+.modal-form select,.modal-form input{background:var(--surf);border:1px solid var(--line);color:var(--fg);padding:10px 14px;border-radius:6px;font:inherit}
+.modal-act{display:flex;justify-content:flex-end;gap:10px;margin-top:10px}
+@media(max-width:900px){#v-cuisine{grid-template-columns:1fr}.cards{grid-template-columns:1fr}.per{grid-template-columns:6rem minmax(0,1fr) 4rem}.per .e{display:none}.inv-table{display:block;overflow-x:auto}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="glow" id="glow"></div>
+<header>
+  <div class="logo"><i></i>Braise</div>
+  <div class="clock" id="clock">11:30</div>
+  <nav aria-label="Vues"><button data-v="cuisine" aria-pressed="true">Cuisine</button><button data-v="inventaire" aria-pressed="false">Inventaire</button><button data-v="bilan" aria-pressed="false">Bilan</button></nav>
+  <div class="st" id="st"><b></b><span id="stt">Caisse synchronisée</span></div>
+</header>
+<div class="banner" id="bn" role="alert">Caisse déconnectée : plus de ventes en direct. L’agent applique la règle fixe (6 steaks quand le stock passe sous 6).</div>
+<main>
+  <section class="view on" id="v-cuisine">
+    <div class="hero" id="hero">
+      <p class="lab">Action recommandée</p>
+      <span class="num" id="num" aria-live="polite"></span>
+      <h1 id="ht">Steaks</h1>
+      <p id="hs"></p>
+      <p class="why" id="hw"></p>
+      <div class="act"><button class="pri" id="ok" title="Entrée">Valider</button><button class="sec" id="no" title="Échap">Ignorer</button></div>
+    </div>
+    <div>
+      <div class="bin" id="bin"><h2>Bac de maintien</h2><p class="sub">Durée de vie maximale : 15 min. Un lot rouge est bientôt à jeter, un lot en pointillés est en cuisson.</p><div id="rows"></div></div>
+      <div class="cards">
+        <div class="card"><p class="lab">Steaks par tranche de 5 min</p><div class="bars" id="bars"></div><div class="ax"><span>−15</span><span>−10</span><span>−5</span><span>+5</span><span>+10</span><span>+15</span></div><p id="fct" style="margin-top:14px"></p></div>
+        <div class="card loss" id="ls"><p class="lab">Perte potentielle</p><div class="big"><span class="rn" id="lossN"></span></div><p id="lossT" style="color:var(--dim)"></p></div>
+      </div>
+    </div>
+  </section>
+  <section class="view" id="v-inventaire">
+    <div class="inv-wrap">
+      <div class="inv-top">
+        <div>
+          <h2>Inventaire &amp; Matières premières</h2>
+          <p class="sub">Suivi temps réel pour le Manager et le Shift Leader · Sorties de congélation et péremptions</p>
+        </div>
+        <div class="inv-ctrls">
+          <button class="inv-btn pri" id="btn-out-freezer">+ Sortir du congélateur</button>
+          <button class="inv-btn" id="btn-return-ice">↩ Réintégrer excédent</button>
+          <button class="inv-btn" id="btn-adjust-inv">✏ Ajuster stock</button>
+        </div>
+      </div>
+      <div class="inv-kpis">
+        <div><b id="inv-k-freezer">1150</b><small>en chambre froide</small></div>
+        <div><b id="inv-k-prep" style="color:var(--saf)">72</b><small>en préparation / sorti</small></div>
+        <div><b id="inv-k-loss" style="color:var(--red)">0</b><small>pertes estimées (IA)</small></div>
+        <div><b id="inv-k-waste" style="color:var(--red)">0</b><small>matières jetées (périmées)</small></div>
+        <div><b id="inv-k-ret" style="color:var(--ok)">0</b><small>glaces réintégrées</small></div>
+      </div>
+      <div class="inv-card">
+        <table class="inv-table">
+          <thead>
+            <tr>
+              <th>Matière / Produit</th>
+              <th>Catégorie &amp; Règle</th>
+              <th>Congélateur</th>
+              <th>En préparation (Lots &amp; Âges)</th>
+              <th>Prêt en bac</th>
+              <th>Perte potentielle (IA)</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="inv-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+  <section class="view" id="v-bilan">
+    <div class="bil"><h2>Bilan par tranche de 30 min</h2>
+      <div class="tot"><div><b id="tc">0</b><small>steaks cuits</small></div><div><b id="tw" style="color:var(--red)">0</b><small>steaks jetés</small></div><div><b id="tp">0 %</b><small>de gaspillage</small></div><div><b id="tca">0 €</b><small>chiffre d’affaires</small></div><div><b id="tu">0</b><small>burgers en attente</small></div></div>
+      <div id="pers"></div>
+    </div>
+  </section>
+</main>
+<div class="dock" role="toolbar" aria-label="Simulation">
+  <button class="chip" data-s="1" aria-pressed="true">×1</button><button class="chip" data-s="5" aria-pressed="false">×5</button><button class="chip" data-s="20" aria-pressed="false">×20</button>
+  <button class="chip" id="pz" aria-pressed="false">Pause</button>
+  <button class="chip" id="au" aria-pressed="false">Mode auto</button>
+  <button class="chip" id="sg">Coup de feu</button>
+  <button class="chip" id="of" aria-pressed="false">Couper la caisse</button>
+  <button class="chip" id="th">Thème</button>
+</div>
+<div class="inv-modal" id="inv-modal">
+  <div class="modal-box">
+    <h3 id="modal-title">Sortie du congélateur</h3>
+    <p id="modal-desc">Transférer des matières premières de la réserve vers la préparation.</p>
+    <div class="modal-form">
+      <label>Produit / Matière
+        <select id="modal-sku">
+          <option value="STEAK_WHOPPER">Steaks Whopper (Viande - Limite stricte)</option>
+          <option value="STEAK_HAMB">Steaks Hamb (Viande - Limite stricte)</option>
+          <option value="STEAK_MASTER">Steaks Master (Viande - Limite stricte)</option>
+          <option value="MIX_GLACE">Bacs Glace Vanille (Réintégrable)</option>
+          <option value="FRITES_SURGELEES">Sachets Frites 2.5kg</option>
+        </select>
+      </label>
+      <label id="lbl-modal-qty">Quantité
+        <input type="number" id="modal-qty" min="1" max="200" value="12">
+      </label>
+      <label id="lbl-modal-freezer" style="display:none">Nouveau stock Congélateur
+        <input type="number" id="modal-val-freezer" min="0" value="400">
+      </label>
+      <label id="lbl-modal-prep" style="display:none">Nouveau stock Préparation
+        <input type="number" id="modal-val-prep" min="0" value="24">
+      </label>
+    </div>
+    <div class="modal-act">
+      <button class="inv-btn" id="modal-cancel">Annuler</button>
+      <button class="inv-btn pri" id="modal-confirm">Confirmer</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<div class="boot" aria-live="polite"><i></i><i></i><i></i><p>Synchronisation de la caisse…</p></div>
+<script>
+const $=s=>document.querySelector(s),sum=(a,k)=>a.reduce((x,y)=>x+y[k],0),clamp=(x,a,b)=>Math.min(b,Math.max(a,x));
+const fmt=t=>String(Math.floor(t/60)%24).padStart(2,'0')+':'+String(t%60).padStart(2,'0');
+const poi=l=>{let L=Math.exp(-l),k=0,p=1;do{k++;p*=Math.random()}while(p>L);return k-1};
+const gs=(t,m,s)=>Math.exp(-((t-m)**2)/(2*s*s));
+const lamB=t=>.9+3.4*gs(t,765,55)+3*gs(t,1280,50)+(t>1140&&t<1230?.6:0);
+const pct=f=>(f>=1?'+':'−')+Math.abs(Math.round((f-1)*100))+' %';
+const HOLD=15;
+const PR=[{n:'Whopper',s:2,c:6,w:.34,p:8,sku:'STEAK_WHOPPER'},{n:'Hamb',s:1,c:4,w:.42,p:5,sku:'STEAK_HAMB'},{n:'Master',s:3,c:8,w:.24,p:10,sku:'STEAK_MASTER'}];
+let T=690,surge=1,surgeEnd=0,speed=1,paused=false,auto=false,off=false,uid=0,unmet=0,cur=null,autoWait=0,lastW=0,view='cuisine';
+const INV={
+  items:{
+    STEAK_WHOPPER:{n:'Steaks Whopper',t:'meat',f:400,p:[{id:1,q:24,a:10,max:60}],canRet:false,u:'steaks',cost:.85,prodIdx:0},
+    STEAK_HAMB:{n:'Steaks Hamb',t:'meat',f:500,p:[{id:2,q:30,a:10,max:60}],canRet:false,u:'steaks',cost:.55,prodIdx:1},
+    STEAK_MASTER:{n:'Steaks Master',t:'meat',f:250,p:[{id:3,q:18,a:10,max:60}],canRet:false,u:'steaks',cost:1.10,prodIdx:2},
+    MIX_GLACE:{n:'Bacs Glace Vanille',t:'ice',f:50,p:[{id:4,q:6,a:15,max:null}],canRet:true,u:'bacs',cost:3.20,prodIdx:null},
+    FRITES_SURGELEES:{n:'Sachets Frites 2.5kg',t:'side',f:80,p:[{id:5,q:8,a:20,max:120}],canRet:false,u:'sachets',cost:1.80,prodIdx:null},
+    PAINS_BUNS:{n:'Pains Burgers (Buns)',t:'dry',f:0,p:[{id:6,q:350,a:0,max:null}],canRet:false,u:'pains',cost:.25,prodIdx:null}
+  },
+  wastedRaw:0,
+  returnedIce:0
+};
+const S=PR.map((p,i)=>({...p,i,bin:[{id:++uid,q:6,age:3+i*2}],ck:[],act:Array(15).fill(lamB(T)*p.w*p.s),pre:Array(15).fill(lamB(T)*p.w*p.s),snooze:0,els:{},gone:{}}));
+const per={},P_=t=>per[t=Math.floor(t/30)]||(per[t]={k:t,ca:0,used:0,cook:0,waste:0,pred:0,act:0});
+const fac=p=>off?1:clamp((sum(p.act.map(x=>({x})),'x')+2)/(sum(p.pre.map(x=>({x})),'x')+2),.8,1.8);
+const mu=(p,m)=>{let s=0;for(let k=1;k<=m;k++)s+=lamB(T+k)*p.w*p.s;return s*fac(p)};
+function roll(el,t){if(el.dataset.v===t)return;el.dataset.v=t;[...el.children].forEach(c=>{c.classList.add('out');setTimeout(()=>c.remove(),460)});const s=document.createElement('span');s.textContent=t;el.appendChild(s);if(!el.classList.contains('num')){el.style.width=s.getBoundingClientRect().width+'px'}}
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(t.h);t.h=setTimeout(()=>t.classList.remove('on'),2300)}
+const rows=S.map(p=>{const r=document.createElement('div');r.className='row';r.innerHTML=`<b>${p.n}</b><span class="rn"></span><div class="track"></div>`;$('#rows').appendChild(r);return{tot:r.querySelector('.rn'),track:r.querySelector('.track')}});
+const bars=[...Array(6)].map((_,i)=>{const b=document.createElement('div');b.className='bar'+(i>2?' f':'');$('#bars').appendChild(b);return b});
+function tick(){
+  T++;if(surge>1&&T>surgeEnd)surge=1;const st=P_(T);
+
+  // Vieillissement de l'inventaire en préparation et élimination des lots expirés hors congélateur
+  Object.values(INV.items).forEach(it => {
+    it.p.forEach(b => b.a++);
+    it.p = it.p.filter(b => {
+      if(b.max && b.a >= b.max){
+        INV.wastedRaw += b.q;
+        toast(`Périmé hors froid : ${b.q} ${it.u} de ${it.n} jetés !`);
+        return false;
+      }
+      return true;
+    });
+  });
+
+  S.forEach(p=>{
+    p.bin.forEach(l=>l.age++);
+    const eb=lamB(T)*p.w*p.s,d=poi(lamB(T)*surge*p.w)*p.s;
+    p.act.push(d);p.pre.push(eb);p.act.shift();p.pre.shift();st.pred+=eb;st.act+=d;
+    let need=d;for(const l of p.bin){const k=Math.min(l.q,need);l.q-=k;need-=k;st.used+=k}
+    st.ca+=(d-need)/p.s*p.p;unmet+=need/p.s;
+    p.bin=p.bin.filter(l=>{if(l.q<=0)return false;if(l.age>=HOLD){st.waste+=l.q;p.gone[l.id]=1;return false}return true});
+    p.ck.forEach(c=>c.left--);p.ck.filter(c=>c.left<=0).forEach(c=>p.bin.push({id:c.id,q:c.q,age:0}));p.ck=p.ck.filter(c=>c.left>0);
+  });
+  decide();render();
+}
+function decide(){
+  let best=null;
+  S.forEach(p=>{if(p.snooze>T)return;
+    const m=p.c+8,mean=mu(p,m),tgt=Math.ceil(mean+.52*Math.sqrt(mean)),sup=sum(p.bin.filter(l=>HOLD-l.age>=3),'q')+sum(p.ck,'q');
+    const q=off?(sup<6?6:0):Math.max(0,tgt-sup);
+    if(q>=3&&(!best||q>best.q))best={i:p.i,q,mean,sup,m}});
+  cur=best;if(!cur)autoWait=0;else if(auto&&++autoWait>=2)launch();
+}
+function launch(){
+  if(!cur)return;
+  const p=S[cur.i];
+  p.ck.push({id:++uid,q:cur.q,left:p.c});
+  P_(T).cook+=cur.q;
+
+  // Consommation dans l'inventaire en préparation (FIFO)
+  const it = INV.items[p.sku];
+  if(it){
+    let needed = cur.q;
+    it.p.sort((a,b)=>b.a-a.a);
+    it.p.forEach(b => {
+      if(needed <= 0) return;
+      const take = Math.min(b.q, needed);
+      b.q -= take;
+      needed -= take;
+    });
+    it.p = it.p.filter(b=>b.q>0);
+    if(needed > 0){
+      it.f = Math.max(0, it.f - needed); // Prélèvement congélateur si besoin
+    }
+  }
+
+  toast(`Lancé : ${cur.q} steaks ${p.n}`);
+  autoWait=0;cur=null;decide();render();
+}
+function ignore(){if(!cur)return;S[cur.i].snooze=T+4;toast(`Ignoré pour 4 min : ${S[cur.i].n}`);cur=null;decide();render()}
+function render(){
+  $('#clock').textContent=fmt(T);
+  $('#glow').style.opacity=.1+.38*clamp(lamB(T)*surge/4,0,1);
+  const h=$('#hero');
+  if(cur){const p=S[cur.i];h.classList.remove('calm');roll($('#num'),String(cur.q));$('#ht').textContent='Steaks '+p.n;$('#hs').textContent=`À lancer avant ${fmt(T+2)} · cuisson ${p.c} min`;
+    $('#hw').textContent=off?'Règle fixe : le stock de ce produit est passé sous 6 steaks.':`Demande attendue : ${Math.round(cur.mean)} steaks d’ici ${cur.m} min, ${cur.sup} déjà prêts ou en cuisson. Tendance des 15 dernières minutes : ${pct(fac(p))}.`}
+  else{h.classList.add('calm');roll($('#num'),'0');$('#ht').textContent='Rien à lancer';$('#hs').textContent='Le bac couvre les prochaines minutes.';$('#hw').textContent='L’agent surveille les ventes et vous prévient dès qu’un produit risque de manquer.'}
+  $('#ok').disabled=$('#no').disabled=!cur;
+  S.forEach((p,i)=>{const r=rows[i];roll(r.tot,String(sum(p.bin,'q')));const live=new Set();
+    [...p.bin.map(l=>({id:l.id,q:l.q,left:HOLD-l.age,ck:0})),...p.ck.map(c=>({id:c.id,q:c.q,left:c.left,ck:1}))].forEach(l=>{const k='b'+l.id;live.add(k);
+      let e=p.els[k];if(!e){e=p.els[k]=document.createElement('div');r.track.appendChild(e)}
+      e.style.setProperty('--q',l.q);e.className='lot'+(l.ck?' ck':l.left>=8?'':l.left>=4?' b':' c');e.textContent=l.ck?`${l.q} · cuit ${l.left} min`:`${l.q} · ${l.left} min`});
+    Object.keys(p.els).filter(k=>!live.has(k)).forEach(k=>{const e=p.els[k];e.classList.add(p.gone[k.slice(1)]?'dead':'gone');setTimeout(()=>e.remove(),700);delete p.els[k]});p.gone={}});
+  const past=[0,0,0],fut=[0,0,0];let fs=0;
+  S.forEach(p=>{p.act.forEach((v,j)=>past[Math.floor(j/5)]+=v);const f=fac(p);fs+=f;for(let k=1;k<=15;k++)fut[Math.floor((k-1)/5)]+=lamB(T+k)*p.w*p.s*f});
+  const all=[...past,...fut],mx=Math.max(...all,1);all.forEach((v,i)=>bars[i].style.height=Math.max(4,v/mx*100)+'%');
+  $('#fct').textContent=`Prévu d’ici 15 min : ${Math.round(fut.reduce((a,b)=>a+b))} steaks. Tendance récente : ${pct(fs/3)}.`;
+  let loss=0,old=99;S.forEach(p=>{loss+=Math.max(0,sum(p.bin,'q')-mu(p,10));p.bin.forEach(l=>old=Math.min(old,HOLD-l.age))});loss=Math.round(loss);
+  roll($('#lossN'),String(loss));$('#lossT').textContent=loss&&old<99?`steaks à jeter vers ${fmt(T+old)} si rien ne change`:'Aucune perte prévue pour l’instant';$('#ls').classList.toggle('hot',loss>0);
+  const w=Object.values(per).reduce((a,x)=>a+x.waste,0);if(w>lastW){const l=$('#ls');l.classList.remove('pulse');void l.offsetWidth;l.classList.add('pulse')}lastW=w;
+  if(view==='bilan')bilan();
+  if(view==='inventaire')renderInv();
+}
+function bilan(){
+  const A=Object.values(per),c=A.reduce((a,x)=>a+x.cook,0)+0,w=A.reduce((a,x)=>a+x.waste,0),ca=A.reduce((a,x)=>a+x.ca,0);
+  $('#tc').textContent=c;$('#tw').textContent=w;$('#tp').textContent=(c?Math.round(w/c*100):0)+' %';$('#tca').textContent=Math.round(ca)+' €';$('#tu').textContent=Math.round(unmet);
+  A.slice(-8).forEach(x=>{let e=document.getElementById('p'+x.k);if(!e){e=document.createElement('div');e.id='p'+x.k;e.className='per';e.innerHTML=`<span class="mono">${fmt(x.k*30)}–${fmt(x.k*30+30)}</span><div class="bx"><i class="u"></i><i class="w"></i></div><span class="mono">${''}</span><span class="mono e"></span>`;$('#pers').prepend(e)}
+    const [u,wd]=e.querySelectorAll('i'),sp=e.querySelectorAll('.mono');u.style.width=Math.min(100,x.used/1.4)+'%';wd.style.width=Math.min(100,x.waste/1.4)+'%';sp[1].textContent=Math.round(x.ca)+' €';sp[2].textContent=x.pred?'écart '+pct(x.act/x.pred):''});
+}
+function renderInv(){
+  let fTot=0,pTot=0,potLossTot=0;
+  const tbody=$('#inv-tbody');
+  if(!tbody)return;
+  tbody.innerHTML='';
+  Object.entries(INV.items).forEach(([sku,it])=>{
+    fTot+=it.f;
+    const prepCount=sum(it.p,'q');
+    pTot+=prepCount;
+
+    let itemLoss=0,earliestExp=999;
+    if(it.max){
+      const rate=it.prodIdx!==null?(lamB(T)*PR[it.prodIdx].w*PR[it.prodIdx].s*fac(PR[it.prodIdx])):0.4;
+      it.p.forEach(b=>{
+        const left=Math.max(0,it.max-b.a);
+        earliestExp=Math.min(earliestExp,left);
+        const expDemand=rate*left;
+        if(b.q>expDemand) itemLoss+=(b.q-expDemand);
+      });
+    }
+    itemLoss=Math.round(itemLoss);
+    potLossTot+=itemLoss*it.cost;
+
+    const tr=document.createElement('tr');
+    const tagCls=it.t==='meat'?'tag-meat':(it.t==='ice'?'tag-ice':'tag-side');
+    const tagTxt=it.t==='meat'?'Viande (15-60 min max, non réintégrable)':(it.t==='ice'?'Glace (Réintégrable en excès)':'Accompagnement / Stable');
+
+    const lotsHtml=it.p.map(b=>{
+      const left=it.max?Math.max(0,it.max-b.a):null;
+      const warn=left!==null&&left<=15?(left<=5?'alert':'warn'):'';
+      return `<span class="batch-pill ${warn}">${b.q} ${it.u} · ${b.a}m hors froid${left!==null?' (reste '+left+'m)':''}</span>`;
+    }).join(' ')||'<span style="color:var(--dim)">0 en préparation</span>';
+
+    const cookedStock=it.prodIdx!==null?sum(S[it.prodIdx].bin,'q')+' prêts':'—';
+    const lossBadge=itemLoss>0
+      ?`<span class="badge-loss">${itemLoss} ${it.u} (~${Math.round(itemLoss*it.cost)} €)</span>`
+      :`<span class="badge-ok">0 (Risque nul)</span>`;
+
+    tr.innerHTML=`
+      <td><b>${it.n}</b></td>
+      <td><span class="inv-tag ${tagCls}">${tagTxt}</span></td>
+      <td class="mono"><b>${it.f}</b> ${it.u}</td>
+      <td>${lotsHtml}</td>
+      <td class="mono">${cookedStock}</td>
+      <td>${lossBadge}</td>
+      <td>
+        <div style="display:flex;gap:6px">
+          <button class="inv-btn" style="padding:4px 8px;font-size:.76rem" onclick="openModal('checkout','${sku}')">+ Sortir</button>
+          <button class="inv-btn" style="padding:4px 8px;font-size:.76rem" onclick="handleReturnClick('${sku}')">↩ Réintégrer</button>
+          <button class="inv-btn" style="padding:4px 8px;font-size:.76rem" onclick="openModal('adjust','${sku}')">✏</button>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  $('#inv-k-freezer').textContent=fTot;
+  $('#inv-k-prep').textContent=pTot;
+  $('#inv-k-loss').textContent=Math.round(potLossTot)+' €';
+  $('#inv-k-waste').textContent=INV.wastedRaw;
+  $('#inv-k-ret').textContent=INV.returnedIce;
+}
+
+let modalMode='checkout',currentModalSku='STEAK_WHOPPER';
+function openModal(mode,sku){
+  modalMode=mode;currentModalSku=sku||'STEAK_WHOPPER';
+  const it=INV.items[currentModalSku];
+  $('#modal-sku').value=currentModalSku;
+  const m=$('#inv-modal');
+  if(mode==='checkout'){
+    $('#modal-title').textContent='Sortie de chambre froide';
+    $('#modal-desc').textContent='Transférer des matières premières vers la préparation.';
+    $('#lbl-modal-qty').style.display='grid';
+    $('#lbl-modal-freezer').style.display='none';
+    $('#lbl-modal-prep').style.display='none';
+  } else if(mode==='return'){
+    $('#modal-title').textContent='Réintégration au congélateur';
+    $('#modal-desc').textContent='Remettre l’excédent au congélateur (glaces autorisées).';
+    $('#lbl-modal-qty').style.display='grid';
+    $('#lbl-modal-freezer').style.display='none';
+    $('#lbl-modal-prep').style.display='none';
+  } else if(mode==='adjust'){
+    $('#modal-title').textContent='Ajustement d’inventaire (Manager)';
+    $('#modal-desc').textContent='Mettre à jour le comptage physique en temps réel.';
+    $('#lbl-modal-qty').style.display='none';
+    $('#lbl-modal-freezer').style.display='grid';
+    $('#lbl-modal-prep').style.display='grid';
+    $('#modal-val-freezer').value=it.f;
+    $('#modal-val-prep').value=sum(it.p,'q');
+  }
+  m.classList.add('on');
+}
+function closeModal(){$('#inv-modal').classList.remove('on')}
+function handleReturnClick(sku){
+  const it=INV.items[sku];
+  if(!it.canRet){
+    toast('Action refusée : pour des raisons sanitaires, la viande sortie ne peut pas être réintégrée au congélateur !');
+    return;
+  }
+  openModal('return',sku);
+}
+$('#modal-cancel').onclick=closeModal;
+$('#btn-out-freezer').onclick=()=>openModal('checkout');
+$('#btn-return-ice').onclick=()=>handleReturnClick('MIX_GLACE');
+$('#btn-adjust-inv').onclick=()=>openModal('adjust');
+$('#modal-confirm').onclick=()=>{
+  const sku=$('#modal-sku').value;
+  const it=INV.items[sku];
+  if(modalMode==='checkout'){
+    const q=+($('#modal-qty').value)||1;
+    it.f=Math.max(0,it.f-q);
+    it.p.push({id:++uid,q,a:0,max:it.max});
+    toast(`${q} ${it.u} de ${it.n} sortis du congélateur`);
+  } else if(modalMode==='return'){
+    const q=+($('#modal-qty').value)||1;
+    if(!it.canRet){
+      toast('Action interdite : la viande sortie ne peut pas être réintégrée !');
+      closeModal();
+      return;
+    }
+    const avail=sum(it.p,'q');
+    const toTake=Math.min(avail,q);
+    let rem=toTake;
+    it.p.forEach(b=>{if(rem<=0)return;const t=Math.min(b.q,rem);b.q-=t;rem-=t});
+    it.p=it.p.filter(b=>b.q>0);
+    it.f+=toTake;
+    INV.returnedIce+=toTake;
+    toast(`${toTake} ${it.u} de ${it.n} réintégrés au congélateur`);
+  } else if(modalMode==='adjust'){
+    const newF=+($('#modal-val-freezer').value)||0;
+    const newP=+($('#modal-val-prep').value)||0;
+    it.f=newF;
+    it.p=[{id:++uid,q:newP,a:0,max:it.max}];
+    toast(`Inventaire ajusté pour ${it.n}`);
+  }
+  closeModal();renderInv();
+};
+
+function loop(){if(!paused)tick();setTimeout(loop,1000/speed)}
+$('#ok').onclick=launch;$('#no').onclick=ignore;
+addEventListener('keydown',e=>{if(e.key==='Enter'&&document.activeElement.tagName!=='BUTTON')launch();if(e.key==='Escape')ignore()});
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
+  view=b.dataset.v;
+  document.querySelectorAll('nav button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  $('#v-cuisine').classList.toggle('on',view==='cuisine');
+  $('#v-inventaire').classList.toggle('on',view==='inventaire');
+  $('#v-bilan').classList.toggle('on',view==='bilan');
+  if(view==='bilan')bilan();
+  if(view==='inventaire')renderInv();
+});
+document.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{speed=+b.dataset.s;document.querySelectorAll('[data-s]').forEach(x=>x.setAttribute('aria-pressed',x===b))});
+const tg=(id,fn)=>$(id).onclick=e=>{const b=e.currentTarget,v=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',v);fn(v)};
+tg('#pz',v=>paused=v);tg('#au',v=>{auto=v;toast(v?'Mode auto : l’agent lance les recommandations':'Mode manuel')});
+tg('#of',v=>{off=v;$('#st').classList.toggle('bad',v);$('#stt').textContent=v?'Caisse déconnectée':'Caisse synchronisée';$('#bn').classList.toggle('on',v);S.forEach(p=>p.snooze=0);decide();render()});
+$('#sg').onclick=()=>{surge=2.2;surgeEnd=T+20;toast('Coup de feu imprévu : l’agent ajuste d’après les ventes')};
+$('#th').onclick=()=>{const r=document.documentElement,d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;r.dataset.theme=d?'light':'dark'};
+decide();render();
+setTimeout(()=>{document.body.classList.add('ready');loop()},1600);
+</script>
+</body>
+</html>
+
