@@ -31,33 +31,7 @@ nav button[aria-pressed=true]{color:var(--fg)}nav button[aria-pressed=true]::aft
 .banner.on{max-height:90px;padding:12px 16px;margin-bottom:12px}
 main{position:relative;padding:0 clamp(16px,4vw,64px) 120px}
 .view{display:none}.view.on{display:grid;animation:vin .5s cubic-bezier(.2,.9,.2,1)}
-#v-cuisine{grid-template-columns:1fr;gap:20px;align-items:start}
-.cuisine-main-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(20px,4vw,48px);align-items:start}
-.lab{font-size:.85rem;color:var(--saf);letter-spacing:.06em}
-.num{position:relative;display:block;height:.88em;overflow:hidden;font:400 clamp(9rem,25vw,20rem)/1 'Anton',Impact,sans-serif;color:var(--ember);transition:color .5s}
-.calm .num{color:var(--line)}
-.num span,.rn span{position:absolute;left:0;top:0;animation:rin .55s cubic-bezier(.2,.9,.2,1) both}
-.num span.out,.rn span.out{animation:rout .45s ease-in both}
-.rn{position:relative;display:inline-block;overflow:hidden;height:1.2em;min-width:1.6ch;vertical-align:bottom}
-h1{font:400 clamp(2.2rem,5vw,4rem)/1.05 'Anton',Impact,sans-serif;text-transform:uppercase;margin:14px 0 8px}
-.hero p{max-width:34rem}.hero .why{color:var(--dim);margin:14px 0 24px;border-top:2px solid var(--line);padding-top:14px}
-.act{display:flex;flex-wrap:wrap;gap:12px;margin-top:4px}
-.act button{font:400 1.6rem 'Anton',Impact,sans-serif;letter-spacing:.08em;text-transform:uppercase;padding:16px 32px;border-radius:8px;transition:transform .12s,opacity .3s,border-color .2s,color .2s;width:100%}
-.act button:active:not(:disabled){transform:scale(.95)}
-.act button:disabled{opacity:.3;cursor:not-allowed}
-.pri{color:var(--on);background:linear-gradient(90deg,var(--saf) 50%,var(--ember) 50%) 100% 0/200% 100%;transition:background-position .45s,transform .12s,opacity .3s!important}
-.pri:hover:not(:disabled){background-position:0 0}
-.sec{border:2px solid var(--dim);color:var(--dim)}.sec:hover:not(:disabled){border-color:var(--fg);color:var(--fg)}
 .bin h2,.bil h2{font:400 2.3rem 'Anton',Impact,sans-serif;letter-spacing:.06em;text-transform:uppercase}
-.bin .sub{color:var(--dim);font-size:.85rem;margin-bottom:18px}
-.row{display:grid;grid-template-columns:clamp(104px,14vw,200px) 3.2rem minmax(0,1fr);align-items:center;gap:14px;margin-bottom:14px}
-.row>b{font:400 clamp(1.8rem,3.4vw,3.2rem) 'Anton',Impact,sans-serif;text-transform:uppercase}
-.row .rn{font:700 1.9rem 'JetBrains Mono',monospace;color:var(--saf)}
-.track{display:flex;gap:6px;padding:6px;min-height:76px;background:var(--surf);border-radius:10px;overflow:hidden}
-.lot{--cell:clamp(24px,2.3vw,38px);flex:none;height:64px;width:calc(var(--q)*var(--cell));min-width:4.6rem;display:flex;align-items:center;justify-content:center;border-radius:6px;background:var(--ember);color:var(--on);font-size:.8rem;font-weight:700;white-space:nowrap;transform-origin:left;animation:lin .5s cubic-bezier(.2,.9,.2,1);transition:width .5s,background-color .8s,opacity .3s,transform .3s}
-.lot.b{background:var(--saf)}.lot.c{background:var(--red);color:#fff}
-.lot.ck{background:transparent;border:2px dashed var(--saf);color:var(--saf)}
-.lot.dead{animation:dead .7s forwards}.lot.gone{opacity:0;transform:scale(.8)}
 
 .bil{max-width:62rem}
 .tot{display:flex;flex-wrap:wrap;gap:12px 40px;margin:16px 0 26px}.tot div{min-width:7rem}.tot b{display:block;font:400 3rem/1 'Anton',Impact,sans-serif}.tot small{color:var(--dim)}
@@ -73,7 +47,6 @@ h1{font:400 clamp(2.2rem,5vw,4rem)/1.05 'Anton',Impact,sans-serif;text-transform
 .boot i{display:block;height:20px;border-radius:6px;background:linear-gradient(90deg,var(--surf) 30%,var(--line) 50%,var(--surf) 70%) 0 0/300% 100%;animation:shim 1.1s linear infinite}
 .boot i:nth-child(1){width:60%;height:120px}.boot i:nth-child(2){width:38%}.boot i:nth-child(3){width:72%}
 .boot p{color:var(--dim)}
-@keyframes rin{from{transform:translateY(100%)}}@keyframes rout{to{transform:translateY(-100%)}}
 @keyframes lin{from{transform:scaleX(0);opacity:0}}
 @keyframes dead{0%{}15%{transform:translateX(-5px)}30%{transform:translateX(5px)}100%{opacity:0;transform:scale(.6);filter:blur(5px)}}
 @keyframes vin{from{opacity:0;transform:translateX(24px)}}
@@ -257,88 +230,6 @@ h1{font:400 clamp(2.2rem,5vw,4rem)/1.05 'Anton',Impact,sans-serif;text-transform
   50%{transform:scale(1.05)}
 }
 
-/* ============================================================
-   Styles Cuisine : KDS, Commandes & Bilan Steaks Sortants
-   ============================================================ */
-.kds-bar{display:none}/* masqué — remplacé par kds-bar-simple */
-.kds-bar-simple{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;padding:8px 4px}
-.k-kpi-item{background:var(--surf);border:1.5px solid var(--line);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:14px;transition:box-shadow .3s,border-color .3s}
-.k-kpi-item.alert-orders{border-color:var(--saf);box-shadow:0 0 16px rgba(255,182,39,.25)}
-.k-kpi-icon{font-size:1.8rem;line-height:1}
-.k-kpi-val{font:400 1.8rem/1.1 'Anton',Impact,sans-serif;letter-spacing:.04em;text-transform:uppercase}
-.k-kpi-lbl{color:var(--dim);font-size:.78rem;margin-top:2px}
-.k-kpi-action{padding:6px;background:transparent;border:0}
-.k-btn-add-order{width:100%;height:100%;min-height:64px;display:flex;align-items:center;justify-content:center;gap:12px;background:linear-gradient(90deg,var(--saf) 0%,var(--ember) 100%);color:var(--on);border-radius:12px;padding:10px 16px;cursor:pointer;border:0;transition:transform .12s,filter .2s;text-align:left;box-shadow:0 4px 14px rgba(255,90,31,.25)}
-.k-btn-add-order:hover{filter:brightness(1.08)}
-.k-btn-add-order:active{transform:scale(.97)}
-.k-btn-add-order span{font-size:1.8rem;font-weight:700;line-height:1}
-.k-btn-add-order b{display:block;font:400 1.15rem/1.1 'Anton',Impact,sans-serif;letter-spacing:.04em;text-transform:uppercase}
-.k-btn-add-order small{display:block;font-size:.72rem;opacity:.95;margin-top:2px}
-
-/* File des tickets KDS */
-.kds-card{background:var(--surf);border-radius:14px;border:1.5px solid var(--line);padding:20px}
-.kds-card-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
-.kds-card-head h3{font:400 1.8rem 'Anton',Impact,sans-serif;letter-spacing:.05em;text-transform:uppercase;margin:0}
-.kds-card-head .sub{color:var(--dim);font-size:.82rem;margin-top:2px}
-.kds-queue-badge{padding:4px 10px;border-radius:99px;background:rgba(255,90,31,.18);color:var(--ember);border:1px solid rgba(255,90,31,.3);font:700 .76rem 'JetBrains Mono',monospace;letter-spacing:.04em}
-.kds-tickets-list{display:grid;gap:10px;max-height:280px;overflow-y:auto;padding-right:4px}
-.kds-ticket-item{background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px;transition:transform .15s,border-color .2s}
-.kds-ticket-item:hover{border-color:var(--dim);transform:translateX(2px)}
-.kds-ticket-item.urgent{border-color:var(--red);background:linear-gradient(90deg,rgba(229,56,59,.12) 0%,var(--bg) 40%)}
-.kds-ticket-meta{display:flex;flex-direction:column;gap:3px}
-.kds-ticket-num{font:700 1.15rem 'Anton',Impact,sans-serif;letter-spacing:.05em;color:var(--fg);display:flex;align-items:center;gap:8px}
-.kds-wait-pill{font:700 .72rem 'JetBrains Mono',monospace;padding:2px 6px;border-radius:4px;background:var(--surf);color:var(--dim);border:1px solid var(--line)}
-.kds-wait-pill.hot{color:var(--red);border-color:var(--red);background:rgba(229,56,59,.15)}
-.kds-ticket-lines{font-size:.86rem;color:var(--fg);font-family:'Space Grotesk',sans-serif}
-.kds-ticket-lines b{color:var(--saf)}
-.kds-btn-serve{padding:12px 20px;border-radius:8px;font:400 1.3rem 'Anton',Impact,sans-serif;letter-spacing:.05em;text-transform:uppercase;background:var(--ok);color:var(--on);border:0;cursor:pointer;transition:transform .12s,background-color .2s;white-space:nowrap;min-width:160px}
-.kds-btn-serve:hover{background:#38b87d}
-.kds-btn-serve:active{transform:scale(.95)}
-.kds-btn-serve.ready{background:var(--ok);color:var(--on);box-shadow:0 0 10px rgba(46,158,107,.35)}
-.kds-btn-serve.ready:hover{background:#38b87d}
-.kds-btn-serve.waiting{background:var(--surf);color:var(--dim);border:1px solid var(--line);font-size:.82rem;font-weight:700}
-.kds-btn-serve.waiting:hover{background:rgba(229,56,59,.12);color:var(--red);border-color:var(--red)}
-
-/* Bilan des Steaks Sortants */
-.k-steaks-summary-card{background:var(--surf);border-radius:14px;border:1.5px solid var(--line);padding:12px 16px}
-.k-steaks-grid{display:flex;flex-direction:column;gap:8px}
-.k-steak-tile{background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:10px 14px;display:flex;flex-direction:column;gap:8px}
-.k-steak-tile-compact{flex-direction:column;gap:8px}
-.k-tile-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.k-tile-icon-name{font:400 1.1rem 'Anton',Impact,sans-serif;letter-spacing:.04em;text-transform:uppercase;display:flex;align-items:center;gap:6px}
-.k-tile-icon-name b{font-weight:400}
-.k-summary-head{margin-bottom:14px}
-.k-summary-head h3{font:400 1.8rem 'Anton',Impact,sans-serif;letter-spacing:.05em;text-transform:uppercase;margin:0}
-.k-summary-head .sub{color:var(--dim);font-size:.82rem;margin-top:2px}
-.k-steaks-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(225px,1fr));gap:12px}
-.k-steak-tile{background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
-.k-tile-head{display:flex;justify-content:space-between;align-items:center}
-.k-tile-title{font:400 1.35rem 'Anton',Impact,sans-serif;letter-spacing:.04em;text-transform:uppercase;display:flex;align-items:center;gap:6px}
-.k-tile-cov{font:700 .72rem 'JetBrains Mono',monospace;padding:3px 8px;border-radius:6px}
-.k-tile-cov.ok{background:rgba(46,158,107,.15);color:var(--ok);border:1px solid rgba(46,158,107,.3)}
-.k-tile-cov.warn{background:rgba(229,56,59,.15);color:var(--red);border:1px solid rgba(229,56,59,.3);animation:badge-pulse 1.5s infinite}
-.k-tile-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;text-align:center;background:var(--surf);padding:8px 4px;border-radius:8px;border:1px solid var(--line)}
-.k-m-col small{display:block;font-size:.63rem;font-family:'JetBrains Mono',monospace;color:var(--dim);text-transform:uppercase;letter-spacing:.02em;white-space:nowrap}
-.k-m-col b{display:block;font:400 1.4rem/1.1 'Anton',Impact,sans-serif;margin-top:2px}
-.k-btn-grill{margin-top:6px;padding:7px 12px;border-radius:8px;border:1px solid rgba(234,163,39,.35);background:rgba(234,163,39,.1);color:var(--saf);font:700 .78rem 'JetBrains Mono',monospace;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s}
-.k-btn-grill:hover{background:var(--saf);color:var(--bg);border-color:var(--saf)}
-.k-btn-grill:active{transform:scale(.97)}
-
-/* Améliorations visuelles directes Cuisine */
-.hero-instruction{display:flex;background:rgba(255,90,31,.1);border:2px solid var(--ember);border-radius:10px;padding:14px 18px;margin-bottom:16px;gap:12px;align-items:flex-start;flex-direction:column}
-.hero-instruction.show{display:flex}
-.hero-instruction-badge{display:inline-block;background:var(--ember);color:var(--on);font:700 1.2rem 'Anton',Impact,sans-serif;letter-spacing:.05em;padding:8px 16px;border-radius:8px;text-transform:uppercase;white-space:nowrap;width:100%}
-.hero-instruction-txt{font:500 1.05rem 'Space Grotesk',sans-serif;color:var(--fg)}
-.hero-instruction-txt b{color:var(--fg);font-weight:700;font-size:1.1rem}
-.k-steak-tile.shortage{border-color:var(--red);box-shadow:0 0 16px rgba(229,56,59,.25)}
-.k-steak-tile.surplus{border-color:rgba(46,158,107,.4)}
-.k-btn-grill.urgent{background:var(--red);color:#fff;border-color:var(--red);animation:badge-pulse 1.4s infinite;font-weight:700}
-.k-btn-grill.urgent:hover{background:#ff4d4f}
-.k-balance-banner{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:8px;font-weight:700;font-size:.9rem}
-.k-balance-banner.ok{background:rgba(46,158,107,.18);color:var(--ok);border:1px solid rgba(46,158,107,.3)}
-.k-balance-banner.warn{background:rgba(229,56,59,.18);color:var(--red);border:1.5px solid var(--red);animation:badge-pulse 1.6s infinite}
-.kds-ticket-item.urgent-5m{border-color:var(--red);background:rgba(229,56,59,.18);animation:red-card-glow 1.5s infinite}
-
 /* Styles pour l'écran Manager */
 .mgr-wrap{max-width:76rem;display:grid;gap:22px}
 .mgr-hdr{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:14px}
@@ -350,6 +241,77 @@ h1{font:400 clamp(2.2rem,5vw,4rem)/1.05 'Anton',Impact,sans-serif;text-transform
 .mgr-kpi .sub-tag{font-size:.76rem;font-family:'JetBrains Mono',monospace;color:var(--saf);display:block;margin-top:4px}
 .mgr-card{background:var(--surf);border:1px solid var(--line);border-radius:12px;overflow:hidden;padding:20px}
 .mgr-card h3{font:400 1.8rem 'Anton',Impact,sans-serif;letter-spacing:.04em;text-transform:uppercase;margin-bottom:14px}
+
+
+/* ============================================================
+   CUISINE : système de composants uniforme
+   Échelle typographique : 0.75 label · 1 texte · 1.25 bouton · 1.5 titre/chiffre · 2.5 consigne
+   Un seul gabarit de bouton (.k-btn, 52 px), une seule carte (.k-card)
+   ============================================================ */
+#v-cuisine{--k-gap:20px;--k-pad:20px;--k-r:14px;--k-btn-h:52px;grid-template-columns:1fr;gap:var(--k-gap);align-content:start}
+.k-layout{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:var(--k-gap);align-items:start}
+.k-col{display:grid;gap:var(--k-gap);min-width:0}
+.k-card{background:var(--surf);border:2px solid var(--line);border-radius:var(--k-r);padding:var(--k-pad);transition:border-color .3s}
+.k-card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.k-title{font:400 1.5rem/1 'Anton',Impact,sans-serif;letter-spacing:.06em;text-transform:uppercase}
+.k-big{font:400 2.5rem/1.05 'Anton',Impact,sans-serif;letter-spacing:.02em;text-transform:uppercase}
+.k-meta{color:var(--dim);font-size:1rem;margin-top:6px}
+.k-label,.k-nums small,.k-hint,.k-legend{font:500 .75rem/1.2 'JetBrains Mono',ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+.k-pill{display:inline-flex;align-items:center;padding:4px 10px;border-radius:99px;border:1px solid var(--line);background:var(--bg);font:700 .75rem/1.2 'JetBrains Mono',ui-monospace,monospace;white-space:nowrap}
+.k-pill.hot{color:var(--red);border-color:var(--red)}
+.k-status{display:inline-flex;align-items:center;gap:8px;font:700 .75rem/1 'JetBrains Mono',ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase}
+.k-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--ok)}
+.k-dot.warn{background:var(--ember)}.k-dot.bad{background:var(--red)}
+
+/* Bouton unique */
+.k-btn{display:inline-flex;align-items:center;justify-content:center;height:var(--k-btn-h);min-width:140px;padding:0 24px;border:2px solid transparent;border-radius:10px;font:400 1.25rem/1 'Anton',Impact,sans-serif;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;transition:transform .12s,background-color .2s,border-color .2s,color .2s,opacity .2s}
+.k-btn:active:not(:disabled){transform:scale(.97)}
+.k-btn:disabled{opacity:.35;cursor:not-allowed}
+.k-btn.pri{background:var(--ember);color:var(--on)}.k-btn.pri:hover:not(:disabled){background:var(--saf)}
+.k-btn.sec{border-color:var(--dim);color:var(--fg)}.k-btn.sec:hover:not(:disabled){border-color:var(--fg)}
+.k-btn.ok{background:var(--ok);color:var(--on)}.k-btn.ok:hover:not(:disabled){filter:brightness(1.08)}
+
+/* Bandeau d'alerte (affiché seulement si besoin) */
+.k-alert{padding:14px 20px;border:2px solid var(--red);border-left-width:8px;border-radius:var(--k-r);background:rgba(229,56,59,.1);font-weight:700}
+.k-alert[hidden]{display:none}
+
+/* Carte Grill */
+.k-action.go{border-color:var(--ember)}
+.k-action .k-big{margin-top:4px}
+.k-btnrow{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-top:20px}
+.k-btnrow .k-btn{width:100%;min-width:0}
+.k-hint{margin-top:12px}
+.k-why{margin-top:12px;padding-top:12px;border-top:1px solid var(--line);color:var(--dim);font-size:1rem}
+.k-why:empty{display:none}
+
+/* Tickets */
+.k-tickets{display:grid;gap:12px}
+.k-ticket{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center;padding:14px 16px;background:var(--bg);border:1.5px solid var(--line);border-left:8px solid var(--line);border-radius:10px}
+.k-ticket.late{border-left-color:var(--red)}.k-ticket.ready{border-left-color:var(--ok)}
+.k-ticket-top{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.k-ticket-id{font:400 1.25rem/1 'Anton',Impact,sans-serif;letter-spacing:.06em}
+.k-ticket-lines{font-size:1rem}.k-ticket-lines b{font-weight:700}
+.k-missing{margin-top:4px;color:var(--red);font-weight:700;font-size:1rem}
+.k-more{text-align:center;padding:4px;font:500 .75rem/1.2 'JetBrains Mono',ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+.k-empty{padding:28px 12px;text-align:center;color:var(--dim);border:1.5px dashed var(--line);border-radius:10px}
+
+/* Bac de maintien : une ligne par produit, même structure x3 */
+.k-prod{padding:16px 0;border-top:1px solid var(--line)}.k-prod:first-child{padding-top:0;border-top:0}
+.k-prod-head{display:grid;grid-template-columns:minmax(120px,1fr) minmax(0,2fr) auto;gap:16px;align-items:center;margin-bottom:12px}
+.k-name{font:400 1.5rem/1 'Anton',Impact,sans-serif;letter-spacing:.06em;text-transform:uppercase}
+.k-sub{display:block;margin-top:6px;color:var(--dim);font-size:1rem}
+.k-nums{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;text-align:center}
+.k-nums b{display:block;margin-top:4px;font:400 1.5rem/1 'Anton',Impact,sans-serif}
+.k-track{display:flex;gap:6px;align-items:stretch;padding:6px;min-height:56px;background:var(--bg);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.k-track:empty::before{content:"Bac vide";align-self:center;padding-left:10px;color:var(--dim)}
+.lot{flex:var(--q) 1 0;min-width:5.6rem;height:44px;display:flex;align-items:center;justify-content:center;border-radius:6px;background:var(--ember);color:var(--on);font:700 .85rem/1 'JetBrains Mono',ui-monospace,monospace;white-space:nowrap;transform-origin:left;animation:lin .5s cubic-bezier(.2,.9,.2,1);transition:flex-grow .5s,background-color .8s,opacity .3s,transform .3s}
+.lot.b{background:var(--saf)}.lot.c{background:var(--red);color:#fff}
+.lot.ck{background:transparent;border:2px dashed var(--saf);color:var(--fg)}
+.lot.dead{animation:dead .7s forwards}.lot.gone{opacity:0;transform:scale(.8)}
+.k-legend{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
+.k-sw{display:inline-block;width:14px;height:14px;margin-right:8px;vertical-align:-3px;border-radius:4px}
+
+@media(max-width:1000px){.k-layout{grid-template-columns:1fr}.k-prod-head{grid-template-columns:minmax(0,1fr) auto}.k-nums{grid-column:1/-1;order:3}}
 
 @media(max-width:900px){#v-cuisine{grid-template-columns:1fr}.per{grid-template-columns:6rem minmax(0,1fr) 4rem}.per .e{display:none}.inv-table{display:block;overflow-x:auto}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
@@ -366,52 +328,45 @@ h1{font:400 clamp(2.2rem,5vw,4rem)/1.05 'Anton',Impact,sans-serif;text-transform
 <div class="banner" id="bn" role="alert">Caisse déconnectée : plus de ventes en direct. L’agent applique la règle fixe (6 steaks quand le stock passe sous 6).</div>
 <main>
   <section class="view on" id="v-cuisine">
-    <!-- Alerte globale + bouton Nouvelle commande -->
-    <div class="kds-bar-simple">
-      <div id="k-global-alert"></div>
-      <button class="k-btn-add-order" onclick="addMockCustomerOrder()">
-        <span>+</span>
-        <div><b>NOUVELLE COMMANDE</b><small>Simuler ticket caisse</small></div>
-      </button>
-    </div>
-
-    <!-- Grille principale Cuisine -->
-    <div class="cuisine-main-grid">
-      <!-- Colonne gauche : Action recommandée + Tickets KDS -->
-      <div>
-        <div class="hero" id="hero">
-          <div class="hero-instruction show" id="hero-inst">
-            <span class="hero-instruction-badge" id="hero-inst-badge">🟢 Grill OK</span>
-            <div class="hero-instruction-txt" id="hero-inst-txt">Le bac est couvert — rien à lancer pour l'instant</div>
+    <div class="k-alert" id="k-global-alert" role="alert" hidden></div>
+    <div class="k-layout">
+      <div class="k-col">
+        <div class="k-card k-action" id="hero">
+          <div class="k-card-head">
+            <h2 class="k-title">Grill</h2>
+            <span class="k-status"><i class="k-dot" id="hero-dot"></i><span id="hero-inst-badge">Grill OK</span></span>
           </div>
-          <div class="act"><button class="pri" id="ok" title="Entrée">Grill libre</button><button class="sec" id="no" title="Échap">Ignorer</button></div>
+          <p class="k-big" id="hero-inst-txt">Rien à lancer</p>
+          <p class="k-meta" id="hero-meta">Le bac est couvert pour les prochaines minutes.</p>
+          <div class="k-btnrow">
+            <button class="k-btn pri" id="ok" type="button">Lancer</button>
+            <button class="k-btn sec" id="no" type="button">Passer</button>
+          </div>
+          <p class="k-hint">Entrée pour lancer · Échap pour passer</p>
+          <p class="k-why" id="hero-why"></p>
         </div>
-
-        <!-- File des tickets KDS en attente de dressage -->
-        <div class="kds-card" style="margin-top:20px">
-          <div class="kds-card-head">
-            <div>
-              <h3>Commandes en attente (KDS)</h3>
-              <p class="sub">File des tickets à assembler et servir au client</p>
-            </div>
-            <span class="kds-queue-badge" id="kds-queue-badge">3 tickets</span>
+        <div class="k-card">
+          <div class="k-card-head">
+            <h2 class="k-title">Commandes</h2>
+            <span class="k-pill" id="kds-queue-badge">0 en attente</span>
           </div>
-          <div class="kds-tickets-list" id="kds-tickets-list"></div>
+          <div class="k-tickets" id="kds-tickets-list"></div>
         </div>
       </div>
-
-      <!-- Colonne droite : Bac de maintien + Bilan des Steaks Sortants + Cartes -->
-      <div>
-        <div class="bin" id="bin">
-          <h2>Bac de maintien</h2>
-          <div id="rows"></div>
+      <div class="k-col">
+        <div class="k-card">
+          <div class="k-card-head">
+            <h2 class="k-title">Bac de maintien</h2>
+            <span class="k-label">Steaks cuits, durée max 15 min</span>
+          </div>
+          <div id="k-products"></div>
+          <div class="k-legend">
+            <span><i class="k-sw" style="background:var(--ember)"></i>8 min et plus</span>
+            <span><i class="k-sw" style="background:var(--saf)"></i>4 à 7 min</span>
+            <span><i class="k-sw" style="background:var(--red)"></i>Moins de 4 min</span>
+            <span><i class="k-sw" style="border:2px dashed var(--saf)"></i>En cuisson</span>
+          </div>
         </div>
-
-        <!-- Bilan des Steaks Sortants : Cuits vs Pas Cuits vs Demandés -->
-        <div class="k-steaks-summary-card" style="margin-top:20px">
-          <div class="k-steaks-grid" id="k-steaks-grid"></div>
-        </div>
-
       </div>
     </div>
   </section>
@@ -564,10 +519,11 @@ h1{font:400 clamp(2.2rem,5vw,4rem)/1.05 'Anton',Impact,sans-serif;text-transform
   </section>
 </main>
 <div class="dock" role="toolbar" aria-label="Simulation">
-  <button class="chip" data-s="1" aria-pressed="true">⏱️ Temps réel (1s/s)</button><button class="chip" data-s="60" aria-pressed="false">⚡ ×60</button><button class="chip" data-s="300" aria-pressed="false">⏩ ×300</button>
+  <button class="chip" data-s="1" aria-pressed="true">Temps réel</button><button class="chip" data-s="60" aria-pressed="false">×60</button><button class="chip" data-s="300" aria-pressed="false">×300</button>
   <button class="chip" id="pz" aria-pressed="false">Pause</button>
-  <button class="chip" id="au" aria-pressed="false">🤖 Auto</button>
-  <button class="chip" id="sg">🔥 Coup de feu</button>
+  <button class="chip" id="au" aria-pressed="false">Auto</button>
+  <button class="chip" id="sg">Coup de feu</button>
+  <button class="chip" onclick="addMockCustomerOrder()">+ Commande test</button>
   <button class="chip dock-secondary" id="of" aria-pressed="false">Couper caisse</button>
   <button class="chip dock-secondary" id="th">Thème</button>
 </div>
@@ -638,9 +594,8 @@ const S=PR.map((p,i)=>({...p,i,bin:[{id:++uid,q:6,age:3+i*2}],ck:[],act:Array(15
 const per={},P_=t=>per[t=Math.floor(t/30)]||(per[t]={k:t,ca:0,used:0,cook:0,waste:0,pred:0,act:0});
 const fac=p=>off?1:clamp((sum(p.act.map(x=>({x})),'x')+2)/(sum(p.pre.map(x=>({x})),'x')+2),.8,1.8);
 const mu=(p,m)=>{let s=0;for(let k=1;k<=m;k++)s+=lamB(T+k)*p.w*p.s;return s*fac(p)};
-function roll(el,t){if(el.dataset.v===t)return;el.dataset.v=t;[...el.children].forEach(c=>{c.classList.add('out');setTimeout(()=>c.remove(),460)});const s=document.createElement('span');s.textContent=t;el.appendChild(s);if(!el.classList.contains('num')){el.style.width=s.getBoundingClientRect().width+'px'}}
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(t.h);t.h=setTimeout(()=>t.classList.remove('on'),2300)}
-const rows=S.map(p=>{const r=document.createElement('div');r.className='row';r.innerHTML=`<b>${p.n}</b><span class="rn"></span><div class="track"></div>`;$('#rows').appendChild(r);return{tot:r.querySelector('.rn'),track:r.querySelector('.track')}});
+const rows=S.map(p=>{const r=document.createElement('div');r.className='k-prod';r.innerHTML=`<div class="k-prod-head"><div><h3 class="k-name">${p.n}</h3><span class="k-sub">${p.s} steak${p.s>1?'s':''} par burger · cuisson ${p.c} min</span></div><div class="k-nums"><div><small>Prêts</small><b data-r>0</b></div><div><small>En cuisson</small><b data-c>0</b></div><div><small>Demandés</small><b data-d>0</b></div></div><button class="k-btn sec" type="button">Cuire</button></div><div class="k-track"></div>`;$('#k-products').appendChild(r);return{ready:r.querySelector('[data-r]'),ck:r.querySelector('[data-c]'),dem:r.querySelector('[data-d]'),btn:r.querySelector('.k-btn'),track:r.querySelector('.k-track')}});
 
 function tick(){
   sec++;
@@ -748,38 +703,30 @@ function render(){
   $('#clock').textContent=fmt(T)+':'+String(sec).padStart(2,'0');
   $('#glow').style.opacity=.1+.38*clamp(lamB(T)*surge/4,0,1);
   const h=$('#hero');
-  const heroInst=$('#hero-inst');
-  const heroBadge=$('#hero-inst-badge');
-  const heroTxt=$('#hero-inst-txt');
   if(cur){
     const p=S[cur.i];
-    h.classList.remove('calm');
-    if(heroInst) heroInst.classList.add('show');
-    if(heroBadge){heroBadge.textContent=`🔥 CUIRE ${cur.q} ${p.n.toUpperCase()}`;heroBadge.style.background='';}
-    if(heroTxt) heroTxt.innerHTML=`Mettre <b>${cur.q} steaks</b> sur la grille · Cuisson <b>${p.c} min</b> → prêts à <b>${fmt(T+p.c)}</b>`;
-    $('#ok').textContent=`🔥 METTRE SUR LA GRILLE (${cur.q})`;
-    $('#no').textContent='Passer (Échap)';
+    h.classList.add('go');
+    $('#hero-dot').className='k-dot warn';
+    $('#hero-inst-badge').textContent='À lancer';
+    $('#hero-inst-txt').textContent=`Cuire ${cur.q} ${p.n}`;
+    $('#hero-meta').textContent=`${cur.q} steaks · cuisson ${p.c} min · prêts à ${fmt(T+p.c)}`;
+    $('#hero-why').textContent=off?'Caisse déconnectée : règle fixe, stock sous 6 steaks.':`Demande prévue : ${Math.round(cur.mean)} steaks d'ici ${cur.m} min, ${cur.sup} déjà prêts ou en cuisson.`;
+    $('#ok').textContent=`Lancer ${cur.q}`;
   } else {
-    h.classList.add('calm');
-    if(heroInst) heroInst.classList.add('show');
-    if(heroBadge){heroBadge.textContent='🟢 Grill OK';heroBadge.style.background='var(--ok)';}
-    if(heroTxt) heroTxt.textContent="Le bac est couvert \u2014 rien \xe0 lancer pour l'instant.";
-    $('#ok').textContent='Grill libre';
-    $('#no').textContent='Ignorer';
+    h.classList.remove('go');
+    $('#hero-dot').className='k-dot';
+    $('#hero-inst-badge').textContent='Grill OK';
+    $('#hero-inst-txt').textContent='Rien à lancer';
+    $('#hero-meta').textContent='Le bac est couvert pour les prochaines minutes.';
+    $('#hero-why').textContent='';
+    $('#ok').textContent='Lancer';
   }
-  // Alerte globale rupture dans la barre sup
-  const globalAlert=$('#k-global-alert');
-  if(globalAlert){
-    const ruptures=S.filter(p=>{const dem=kitchenOrders.reduce((a,o)=>{const it=o.items.find(x=>x.n===p.n);return a+(it?it.q*(it.s||p.s):0)},0);return sum(p.bin,'q')<dem;});
-    if(ruptures.length>0) globalAlert.innerHTML=`<span style="color:var(--red);font-weight:700;font-size:.82rem">🚨 RUPTURE : ${ruptures.map(p=>p.n).join(' · ')}</span>`;
-    else if(kitchenOrders.length>0) globalAlert.innerHTML=`<span style="color:var(--ok);font-size:.82rem;font-weight:700">✅ ${kitchenOrders.length} commande${kitchenOrders.length>1?'s':''} en attente</span>`;
-    else globalAlert.innerHTML='';
-  }
+  $('#no').textContent='Passer';
   $('#ok').disabled=$('#no').disabled=!cur;
-  S.forEach((p,i)=>{const r=rows[i];roll(r.tot,String(sum(p.bin,'q')));const live=new Set();
+  S.forEach((p,i)=>{const r=rows[i];const live=new Set();
     [...p.bin.map(l=>({id:l.id,q:l.q,left:HOLD-l.age,ck:0})),...p.ck.map(c=>({id:c.id,q:c.q,left:c.left,ck:1}))].forEach(l=>{const k='b'+l.id;live.add(k);
       let e=p.els[k];if(!e){e=p.els[k]=document.createElement('div');r.track.appendChild(e)}
-      e.style.setProperty('--q',l.q);e.className='lot'+(l.ck?' ck':l.left>=8?'':l.left>=4?' b':' c');e.textContent=l.ck?`${l.q} · cuit ${l.left} min`:`${l.q} · ${l.left} min`});
+      e.style.setProperty('--q',l.q);e.className='lot'+(l.ck?' ck':l.left>=8?'':l.left>=4?' b':' c');e.textContent=`${l.q} · ${l.left} min`});
     Object.keys(p.els).filter(k=>!live.has(k)).forEach(k=>{const e=p.els[k];e.classList.add(p.gone[k.slice(1)]?'dead':'gone');setTimeout(()=>e.remove(),700);delete p.els[k]});p.gone={}});
   let loss=0,old=99;S.forEach(p=>{loss+=Math.max(0,sum(p.bin,'q')-mu(p,10));p.bin.forEach(l=>old=Math.min(old,HOLD-l.age))});loss=Math.round(loss);
   renderCuisineKDS();
@@ -846,152 +793,65 @@ function applyLeaderAdvice(){
   toast('💡 Recommandation appliquée : stock préparé pour le rush !');
 }
 
+function ticketDemand(){
+  const d={};PR.forEach(p=>d[p.n]=0);
+  kitchenOrders.forEach(o=>o.items.forEach(it=>{const p=PR.find(x=>x.n===it.n);d[it.n]=(d[it.n]||0)+it.q*(p?p.s:(it.s||1))}));
+  return d;
+}
 function renderCuisineKDS(){
-  const ticketsList = $('#kds-tickets-list');
-  const steaksGrid = $('#k-steaks-grid');
-  if(!ticketsList || !steaksGrid) return;
+  const list=$('#kds-tickets-list');
+  if(!list) return;
+  const dem=ticketDemand();
 
-  const totalOrders = kitchenOrders.length;
-  const totalBurgers = kitchenOrders.reduce((sum, o) => sum + (o.burgers || 0), 0);
+  // Lignes produit : prêts / en cuisson / demandés + bouton unique
+  const shortages=[];
+  S.forEach((p,i)=>{
+    const r=rows[i],ready=sum(p.bin,'q'),cooking=sum(p.ck,'q'),need=dem[p.n]||0,short=Math.max(0,need-ready-cooking);
+    const qty=short>0?Math.max(p.s*2,short):p.s*2;
+    r.ready.textContent=ready;r.ck.textContent=cooking;r.dem.textContent=need;
+    r.btn.textContent=`Cuire +${qty}`;
+    r.btn.className='k-btn '+(short>0?'pri':'sec');
+    r.btn.onclick=()=>quickGrillProduct(p.sku,qty);
+    if(short>0) shortages.push(`${p.n} −${short}`);
+  });
 
-  // Mise à jour du bandeau supérieur
-  const ordersVal = $('#k-orders-val');
-  const ordersSub = $('#k-orders-sub');
-  const ordersBox = $('#k-kpi-orders-box');
-  const queueBadge = $('#kds-queue-badge');
-
-  if(ordersVal){
-    if(totalOrders === 0){
-      ordersVal.textContent = '0 COMMANDE · FLUIDE';
-      ordersVal.style.color = 'var(--ok)';
-      if(ordersSub) ordersSub.textContent = "File d'attente vide (aucun burger à dresser)";
-      if(ordersBox) ordersBox.classList.remove('pulse-red');
-    } else {
-      ordersVal.textContent = `${totalOrders} COMMANDE${totalOrders > 1 ? 'S' : ''}`;
-      ordersVal.style.color = totalOrders >= 5 ? 'var(--red)' : (totalOrders >= 3 ? 'var(--saf)' : 'var(--fg)');
-      if(ordersSub) ordersSub.textContent = `${totalBurgers} burger${totalBurgers > 1 ? 's' : ''} en attente de dressage`;
-      if(ordersBox){
-        if(totalOrders >= 5 || kitchenOrders.some(o => o.age >= 4)){
-          ordersBox.classList.add('pulse-red');
-        } else {
-          ordersBox.classList.remove('pulse-red');
-        }
-      }
-    }
+  // Alerte : seulement s'il manque des steaks pour les tickets
+  const al=$('#k-global-alert');
+  if(al){
+    if(shortages.length){al.hidden=false;al.textContent='Steaks manquants pour les commandes : '+shortages.join(' · ');}
+    else{al.hidden=true;al.textContent='';}
   }
-  if(queueBadge) queueBadge.textContent = `${totalOrders} ticket${totalOrders > 1 ? 's' : ''}`;
 
-  // Calcul des totaux globaux et par produit
-  let totCooked = 0, totCooking = 0, totUncooked = 0, totDemanded = 0;
-  const demandedByBurger = {};
-  PR.forEach(p => demandedByBurger[p.n] = 0);
-
-  kitchenOrders.forEach(o => {
-    (o.items || []).forEach(it => {
-      const p = PR.find(prod => prod.n === it.n);
-      const steaksNeeded = it.q * (p ? p.s : (it.s || 1));
-      demandedByBurger[it.n] = (demandedByBurger[it.n] || 0) + steaksNeeded;
-      totDemanded += steaksNeeded;
+  // Tickets (5 max à l'écran)
+  const n=kitchenOrders.length;
+  $('#kds-queue-badge').textContent=`${n} en attente`;
+  list.innerHTML='';
+  if(n===0){
+    list.innerHTML='<div class="k-empty">Aucune commande en attente</div>';
+    return;
+  }
+  kitchenOrders.slice(0,5).forEach(ord=>{
+    const late=ord.age>=3;
+    const missing=[];
+    ord.items.forEach(it=>{
+      const prod=S.find(p=>p.n===it.n);
+      const needed=it.q*(prod?prod.s:(it.s||1)),avail=prod?sum(prod.bin,'q'):0;
+      if(avail<needed) missing.push(`${needed-avail} ${it.n}`);
     });
-  });
-
-  S.forEach(p => {
-    totCooked += sum(p.bin, 'q');
-    totCooking += sum(p.ck, 'q');
-    const rawBatches = INV.items[p.sku]?.p || [];
-    totUncooked += sum(rawBatches, 'q');
-  });
-
-  const cookedVal = $('#k-steaks-cooked-val');
-  if(cookedVal){
-    cookedVal.textContent = `${totCooked} CUITS`;
-    cookedVal.style.color = totCooked < totDemanded ? 'var(--red)' : 'var(--ok)';
-  }
-  const cookingVal = $('#k-steaks-cooking-val');
-  if(cookingVal) cookingVal.textContent = `${totCooking} EN CUISSON`;
-  const uncookedVal = $('#k-steaks-uncooked-val');
-  if(uncookedVal) uncookedVal.textContent = `${totUncooked} PAS CUITS`;
-
-  // Rendu de la grille des steaks par burger
-  const BURGER_META = {
-    Whopper: { icon: '🥩', subtitle: 'Steak 4:1 (2 par burger)' },
-    Hamb: { icon: '🍔', subtitle: 'Steak 10:1 (1 par burger)' },
-    Master: { icon: '👑', subtitle: 'Gros Steak Gourmet (3 par burger)' }
-  };
-
-  steaksGrid.innerHTML = '';
-  S.forEach(p => {
-    const meta = BURGER_META[p.n] || { icon: '🍔', subtitle: `${p.s} steak(s)/burger` };
-    const dem = demandedByBurger[p.n] || 0;
-    const ckd = sum(p.bin, 'q');
-    const ing = sum(p.ck, 'q');
-    const raw = sum(INV.items[p.sku]?.p || [], 'q');
-    const balance = ckd - dem;
-    const isCovered = balance >= 0;
-    const grillQty = Math.max(p.s * 2, Math.abs(balance));
-
-    const tile = document.createElement('div');
-    tile.className = 'k-steak-tile k-steak-tile-compact' + (isCovered ? '' : ' shortage');
-    tile.innerHTML = `
-      <div class="k-tile-row">
-        <span class="k-tile-icon-name">${meta.icon} <b>${p.n}</b></span>
-        <span class="k-tile-cov ${isCovered ? 'ok' : 'warn'}">${isCovered ? '+' + balance : '🚨 −' + Math.abs(balance)}</span>
+    const canServe=missing.length===0;
+    const steaks=ord.items.reduce((a,it)=>{const prod=PR.find(p=>p.n===it.n);return a+it.q*(prod?prod.s:(it.s||1))},0);
+    const el=document.createElement('div');
+    el.className='k-ticket'+(canServe?' ready':(late?' late':''));
+    el.innerHTML=`
+      <div>
+        <div class="k-ticket-top"><span class="k-ticket-id">#${ord.id}</span><span class="k-pill${late?' hot':''}">${ord.age} min</span></div>
+        <div class="k-ticket-lines">${ord.items.map(it=>`<b>${it.q}×</b> ${it.n}`).join(' · ')} <span class="k-meta">${steaks} steaks</span></div>
+        ${canServe?'':`<div class="k-missing">Manque ${missing.join(', ')}</div>`}
       </div>
-      <button class="k-btn-grill ${isCovered ? '' : 'urgent'}" onclick="quickGrillProduct('${p.sku}', ${grillQty})">
-        ${isCovered ? '🔥 Cuire +' + (p.s * 2) : '🚨 CUIRE +' + grillQty + ' MAINTENANT'}
-      </button>
-    `;
-    steaksGrid.appendChild(tile);
+      <button class="k-btn ${canServe?'ok':'sec'}" type="button" ${canServe?'':'disabled'} onclick="serveKitchenTicket(${ord.id})">Servir</button>`;
+    list.appendChild(el);
   });
-
-  // Rendu de la file des tickets KDS
-  ticketsList.innerHTML = '';
-  if(kitchenOrders.length === 0){
-    ticketsList.innerHTML = `
-      <div style="text-align:center;padding:32px 14px;color:var(--dim);border:1.5px dashed var(--line);border-radius:10px">
-        <div style="font-size:2rem;margin-bottom:6px">🎉</div>
-        <b style="color:var(--ok);font-size:1.05rem">File d'attente vide</b>
-        <p style="font-size:.82rem;margin-top:4px">Toutes les commandes ont été assemblées et servies aux clients.</p>
-      </div>
-    `;
-  } else {
-    kitchenOrders.forEach(ord => {
-      const isUrgent = ord.age >= 3;
-      const linesTxt = ord.items.map(it => `<b>${it.q}x</b> ${it.n}`).join(' &nbsp;·&nbsp; ');
-      const totalSteaksInOrder = ord.items.reduce((acc, it) => {
-        const prod = PR.find(p => p.n === it.n);
-        return acc + it.q * (prod ? prod.s : (it.s || 1));
-      }, 0);
-
-      let canServe = true;
-      let missingReason = [];
-      ord.items.forEach(it => {
-        const prod = S.find(p => p.n === it.n);
-        const needed = it.q * (prod ? prod.s : (it.s || 1));
-        const avail = prod ? sum(prod.bin, 'q') : 0;
-        if(avail < needed){
-          canServe = false;
-          missingReason.push(`${needed - avail} ${it.n}`);
-        }
-      });
-
-      const itemEl = document.createElement('div');
-      itemEl.className = `kds-ticket-item ${isUrgent ? 'urgent' : ''}`;
-      itemEl.innerHTML = `
-        <div class="kds-ticket-meta">
-          <div class="kds-ticket-num">
-            <span>Ticket #${ord.id}</span>
-            <span class="kds-wait-pill ${isUrgent ? 'hot' : ''}">⏱ ${ord.age} min d'attente</span>
-          </div>
-          <div class="kds-ticket-lines">${linesTxt} <small style="color:var(--dim);font-family:'JetBrains Mono',monospace">(${totalSteaksInOrder} steaks)</small></div>
-        </div>
-        <button class="kds-btn-serve ${canServe ? 'ready' : 'waiting'}" onclick="serveKitchenTicket(${ord.id})" title="${canServe ? 'Tous les steaks sont prêts en bac !' : 'Steaks manquants : ' + missingReason.join(', ')}">
-          ${canServe ? '✅ PRÊT À SERVIR' : '⏳ Manque steaks'}
-        </button>
-      `;
-      ticketsList.appendChild(itemEl);
-    });
-  }
+  if(n>5){const m=document.createElement('div');m.className='k-more';m.textContent=`+ ${n-5} autre${n-5>1?'s':''} commande${n-5>1?'s':''}`;list.appendChild(m);}
 }
 
 function serveKitchenTicket(id){
@@ -1020,9 +880,9 @@ function serveKitchenTicket(id){
   playClickSound(720, 'triangle', 0.12);
 
   if(missingSteaks > 0){
-    toast(`⚠️ Ticket #${id} servi — Manque ${missingSteaks} steak(s) cuits en bac !`);
+    toast(`Ticket #${id} servi : il manquait ${missingSteaks} steak(s) en bac`);
   } else {
-    toast(`✅ Ticket #${id} servi (${ord.burgers} burger${ord.burgers > 1 ? 's' : ''} assemblé${ord.burgers > 1 ? 's' : ''})`);
+    toast(`Ticket #${id} servi (${ord.burgers} burger${ord.burgers > 1 ? 's' : ''})`);
   }
 
   render();
@@ -1045,7 +905,7 @@ function addMockCustomerOrder(){
   const steaks = items.reduce((a, x) => a + (x.q * x.s), 0);
   kitchenOrders.push({id: nextOrderId, age: 0, items, burgers, steaks});
   playClickSound(620, 'sine', 0.1);
-  toast(`🛎️ Nouveau ticket #${nextOrderId} caisse (+${burgers} burger${burgers > 1 ? 's' : ''})`);
+  toast(`Nouveau ticket #${nextOrderId} (${burgers} burger${burgers > 1 ? 's' : ''})`);
   render();
 }
 
@@ -1070,7 +930,7 @@ function quickGrillProduct(sku, qty){
   prod.ck.push({id: ++uid, q: qty, left: prod.c});
   P_(T).cook += qty;
   playClickSound(580, 'sine', 0.08);
-  toast(`🔥 Grill lancé : +${qty} steaks ${prod.n} (cuisson ${prod.c} min)`);
+  toast(`Grill lancé : ${qty} steaks ${prod.n} (cuisson ${prod.c} min)`);
   decide();
   render();
 }
@@ -1582,4 +1442,3 @@ setTimeout(()=>{document.body.classList.add('ready');loop()},1600);
 </script>
 </body>
 </html>
-
