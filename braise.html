@@ -204,6 +204,15 @@ main{position:relative;padding:0 clamp(16px,4vw,64px) 120px}
 @media(max-width:1000px){.k-layout{grid-template-columns:1fr}.k-prod-head{grid-template-columns:minmax(0,1fr) auto}.k-nums{grid-column:1/-1;order:3}}
 
 @media(max-width:900px){#v-cuisine{grid-template-columns:1fr}.per{grid-template-columns:6rem minmax(0,1fr) 4rem}.per .e{display:none}.inv-table{display:block;overflow-x:auto}}
+@media(max-width:640px){
+  header{padding:12px 14px;gap:8px}
+  nav{overflow-x:auto;width:100%;white-space:nowrap;padding-bottom:6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  nav::-webkit-scrollbar{display:none}
+  nav button{padding:6px 12px;font-size:0.88rem}
+  main{padding:0 12px 140px}
+  .dock{padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px));gap:5px}
+  .chip{padding:6px 10px;font-size:0.75rem}
+}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
 </head>
