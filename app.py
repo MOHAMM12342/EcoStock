@@ -6,19 +6,24 @@ Fournit :
 3. Le téléchargement du journal Excel généré
 """
 
-from datetime import date
+from datetime import date, datetime, timedelta
 from pathlib import Path
-from typing import Optional
+from typing import Dict, List, Optional, Tuple
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
+import numpy as np
+import pandas as pd
 import uvicorn
 
 from pydantic import BaseModel
+from src.config import PRODUCTS
 from src.data.generate import generate_30min_dataset
+from src.data.pipeline import get_daily_test_data, get_test_dates, get_train_data
 from src.export.excel import export_journal_to_excel
 from src.forecast.model import DEFAULT_MODEL_PATH, DemandForecaster, set_global_forecaster
 from src.policy.newsvendor import decide_fixed_policy, decide_newsvendor
+from src.simulator.kitchen import SteakBatch, create_initial_kitchen_state
 from src.simulator.inventory import InventoryManager
 from src.simulator.runner import simulate_day
 
@@ -38,7 +43,9 @@ app.add_middleware(
 
 BASE_DIR = Path(__file__).resolve().parent
 HTML_FILE = BASE_DIR / "braise.html"
-EXCEL_FILE = BASE_DIR / "journal_braise_demo.xlsx"
+EXPORTS_DIR = BASE_DIR / "exports"
+EXPORTS_DIR.mkdir(parents=True, exist_ok=True)
+EXCEL_FILE = EXPORTS_DIR / "journal_braise_dernier.xlsx"
 
 # Instance d'inventaire en direct pour le manager et le chef d'équipe
 LIVE_INVENTORY = InventoryManager()
@@ -61,12 +68,29 @@ class DailyUpdateRequest(BaseModel):
     days_count: Optional[int] = 1
     n_additional_trees: Optional[int] = 15
     learning_rate: Optional[float] = 0.05
+    date_str: Optional[str] = None
+
+class LiveTranche(BaseModel):
+    k: int
+    time_label: Optional[str] = None
+    ca: float = 0.0
+    used: int = 0
+    cook: int = 0
+    waste: int = 0
+    pred: float = 0.0
+    act: int = 0
+
+class LiveExportRequest(BaseModel):
+    date: Optional[str] = None
+    session_minutes: Optional[int] = None
+    periods: List[LiveTranche] = []
 
 # Initialisation lazy du modèle avec persistance
 _FORECASTER = None
 
 
 def get_or_train_forecaster():
+    """Charge le modèle LightGBM pré-entraîné ou l'entraîne sur le split Train réel (18 mois)."""
     global _FORECASTER
     if _FORECASTER is None:
         if DEFAULT_MODEL_PATH.exists():
@@ -76,11 +100,58 @@ def get_or_train_forecaster():
                 return _FORECASTER
             except Exception:
                 pass
-        df = generate_30min_dataset(days_count=90, seed=42)
-        _FORECASTER = DemandForecaster().fit(df)
+        # Entraînement initial sur les données réelles (14 mois / 35 616 tranches)
+        df_train = get_train_data()
+        _FORECASTER = DemandForecaster().fit(df_train)
         _FORECASTER.save(DEFAULT_MODEL_PATH)
         set_global_forecaster(_FORECASTER)
     return _FORECASTER
+
+
+def compute_realtime_forecast_rates(forecaster: DemandForecaster, dt: Optional[datetime] = None) -> Dict[str, float]:
+    """Calcule dynamiquement les taux de consommation par minute à partir du modèle LightGBM."""
+    if dt is None:
+        dt = datetime.now()
+
+    fixed_holidays = {(1, 1), (5, 1), (5, 8), (7, 14), (8, 15), (11, 1), (11, 11), (12, 25)}
+    dow = int(dt.weekday())
+    month = int(dt.month)
+    is_we = 1 if dow in (5, 6) else 0
+    is_hol = 1 if (dt.month, dt.day) in fixed_holidays else 0
+    next_day = dt + timedelta(days=1)
+    is_hol_eve = 1 if (next_day.month, next_day.day) in fixed_holidays else 0
+    is_student = 1 if (dow in (3, 4) and dt.hour >= 19) else 0
+    temp = 12.0 + 10.0 * np.sin(2 * np.pi * (month - 4) / 12) + (dt.hour - 10) * 0.5
+
+    rows = []
+    for prod in ["Whopper", "Hamb", "Master"]:
+        rows.append({
+            "produit": prod,
+            "hour": int(dt.hour),
+            "minute": int((dt.minute // 30) * 30),
+            "day_of_week": dow,
+            "month": month,
+            "is_weekend": is_we,
+            "is_holiday": is_hol,
+            "is_holiday_eve": is_hol_eve,
+            "is_student_night": is_student,
+            "temperature": round(float(temp), 1),
+            "rain_mm": 0.0,
+        })
+
+    feat_df = pd.DataFrame(rows)
+    preds = forecaster.predict(feat_df)
+    mu_map = {row["product"]: float(row["mu"]) for _, row in preds.iterrows()}
+
+    # Taux par minute = mu / 30 min
+    rates = {
+        "STEAK_WHOPPER": round(mu_map.get("Whopper", 15.0) / 30.0, 3),
+        "STEAK_HAMB": round(mu_map.get("Hamb", 15.0) / 30.0, 3),
+        "STEAK_MASTER": round(mu_map.get("Master", 3.0) / 30.0, 3),
+        "FRITES_SURGELEES": round((mu_map.get("Whopper", 15.0) + mu_map.get("Hamb", 15.0)) * 0.05 / 30.0, 3),
+        "PAINS_BUNS": round((mu_map.get("Whopper", 15.0) / 2.0 + mu_map.get("Hamb", 15.0) + mu_map.get("Master", 3.0) / 3.0) / 30.0, 3),
+    }
+    return rates
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -185,22 +256,29 @@ def get_forecast_model_info():
 
 @app.post("/api/forecast/daily-update")
 def train_daily_update(payload: Optional[DailyUpdateRequest] = None):
-    """Entraînement continu de fin de journée sur les nouvelles données journalières.
-
-    Met à jour la baseline historique et ajoute de nouveaux arbres de boosting
-    LightGBM via init_model sans repartir de zéro, puis sauvegarde les poids sur disque.
-    """
+    """Entraînement continu de fin de journée sur les nouvelles données journalières issues du test set ou de la caisse."""
     days = payload.days_count if payload and payload.days_count else 1
     n_trees = payload.n_additional_trees if payload and payload.n_additional_trees else 15
     lr = payload.learning_rate if payload and payload.learning_rate else 0.05
+    date_str = payload.date_str if payload else None
 
     forecaster = get_or_train_forecaster()
-    daily_df = generate_30min_dataset(days_count=days, seed=None)
+    test_dates = get_test_dates()
+    if test_dates:
+        if date_str and date_str in test_dates:
+            daily_df = get_daily_test_data(date_str)
+        else:
+            target_idx = min(len(test_dates) - 1, getattr(forecaster, "days_trained", 0))
+            daily_df = get_daily_test_data(test_dates[target_idx])
+    else:
+        daily_df = generate_30min_dataset(days_count=days, seed=None)
+
     forecaster.update_daily(daily_df, n_additional_trees=n_trees, learning_rate=lr, save_after=True)
+    sample_day = daily_df["date"].iloc[0] if "date" in daily_df.columns else "inconnue"
 
     return {
         "status": "success",
-        "message": f"Entraînement continu terminé sur {days} jour(s). Poids sauvegardés dans {DEFAULT_MODEL_PATH}.",
+        "message": f"Entraînement continu terminé sur la journée {sample_day}. Poids sauvegardés dans {DEFAULT_MODEL_PATH}.",
         "trees_per_product": {
             p: m.booster_.num_trees()
             for p, m in forecaster.models.items()
@@ -208,7 +286,109 @@ def train_daily_update(payload: Optional[DailyUpdateRequest] = None):
         },
         "days_trained": forecaster.days_trained,
         "last_trained_at": forecaster.last_trained_at,
+        "sample_day": sample_day,
     }
+
+
+@app.get("/api/dataset/info")
+def get_dataset_info():
+    """Informations sur le dataset extrait (18 mois / 944 451 tickets réels) et le split Train/Test."""
+    test_dates = get_test_dates()
+    train_df = get_train_data()
+    return {
+        "dataset_name": "tickets_et_compositions_18_mois.zip",
+        "total_tickets": 944451,
+        "total_days": 546,
+        "train_period": {
+            "start": "2025-01-01",
+            "end": "2026-02-28",
+            "days_count": train_df["date"].nunique(),
+            "slots_30min": len(train_df),
+        },
+        "test_period": {
+            "start": test_dates[0] if test_dates else "2026-03-01",
+            "end": test_dates[-1] if test_dates else "2026-06-30",
+            "days_count": len(test_dates),
+            "slots_30min": len(test_dates) * 28 * 3,
+        },
+        "products": ["Whopper", "Hamb", "Master"],
+        "status": "extracted_and_ready",
+    }
+
+
+@app.get("/api/kitchen/recommendation")
+def get_kitchen_recommendation(
+    bins_whopper: int = 6,
+    bins_hamb: int = 6,
+    bins_master: int = 6,
+    cooking_whopper: int = 0,
+    cooking_hamb: int = 0,
+    cooking_master: int = 0,
+    pos_connected: bool = True,
+):
+    """Fournit en direct les inputs décisionnels pour l'écran Cuisine (carte Grill et alertes)."""
+    now = datetime.now()
+    forecaster = get_or_train_forecaster()
+
+    # Inférence du modèle LightGBM pour l'instant t
+    fixed_holidays = {(1, 1), (5, 1), (5, 8), (7, 14), (8, 15), (11, 1), (11, 11), (12, 25)}
+    dow = int(now.weekday())
+    month = int(now.month)
+    next_day = now + timedelta(days=1)
+    feat_rows = []
+    for prod_name in ["Whopper", "Hamb", "Master"]:
+        feat_rows.append({
+            "produit": prod_name,
+            "hour": int(now.hour),
+            "minute": int((now.minute // 30) * 30),
+            "day_of_week": dow,
+            "month": month,
+            "is_weekend": 1 if dow in (5, 6) else 0,
+            "is_holiday": 1 if (now.month, now.day) in fixed_holidays else 0,
+            "is_holiday_eve": 1 if (next_day.month, next_day.day) in fixed_holidays else 0,
+            "is_student_night": 1 if (dow in (3, 4) and now.hour >= 19) else 0,
+            "temperature": 19.5,
+            "rain_mm": 0.0,
+        })
+    preds = forecaster.predict(pd.DataFrame(feat_rows))
+
+    # État physique de la cuisine
+    state = create_initial_kitchen_state(now, pos_connected=pos_connected)
+    state.products["Whopper"].bin_batches = [SteakBatch(1, bins_whopper, 5)]
+    state.products["Whopper"].cooking_batches = [SteakBatch(2, cooking_whopper, 0)] if cooking_whopper > 0 else []
+    state.products["Hamb"].bin_batches = [SteakBatch(3, bins_hamb, 5)]
+    state.products["Hamb"].cooking_batches = [SteakBatch(4, cooking_hamb, 0)] if cooking_hamb > 0 else []
+    state.products["Master"].bin_batches = [SteakBatch(5, bins_master, 5)]
+    state.products["Master"].cooking_batches = [SteakBatch(6, cooking_master, 0)] if cooking_master > 0 else []
+
+    actions = decide_newsvendor(state, preds, now)
+    if actions:
+        act = actions[0]
+        cfg = PRODUCTS[act.product]
+        ready_dt = now + timedelta(minutes=cfg.cook_time_minutes)
+        return {
+            "has_recommendation": True,
+            "product": act.product,
+            "quantity": act.quantity,
+            "cook_time_minutes": cfg.cook_time_minutes,
+            "ready_at": ready_dt.strftime("%H:%M"),
+            "reason": act.reason,
+            "status_badge": "À LANCER",
+            "dot_class": "k-dot warn",
+            "model_forecast": {row["product"]: float(row["mu"]) for _, row in preds.iterrows()},
+        }
+    else:
+        return {
+            "has_recommendation": False,
+            "product": None,
+            "quantity": 0,
+            "cook_time_minutes": 0,
+            "ready_at": None,
+            "reason": "Le bac est couvert pour les prochaines minutes.",
+            "status_badge": "Grill OK",
+            "dot_class": "k-dot",
+            "model_forecast": {row["product"]: float(row["mu"]) for _, row in preds.iterrows()},
+        }
 
 
 @app.post("/api/simulate")
@@ -233,6 +413,8 @@ def run_simulation(
 
     # Sauvegarde Excel
     export_journal_to_excel(logs.journal_30min, EXCEL_FILE)
+    sim_export = EXPORTS_DIR / f"journal_braise_sim_{logs.day}.xlsx"
+    export_journal_to_excel(logs.journal_30min, sim_export)
 
     return {
         "day": str(logs.day),
@@ -245,45 +427,40 @@ def run_simulation(
 
 @app.get("/api/inventory")
 def get_inventory():
-    """Retourne l'état complet de l'inventaire en temps réel et les pertes potentielles."""
+    """Retourne l'état complet de l'inventaire en temps réel et les pertes potentielles calculées avec le modèle."""
+    forecaster = get_or_train_forecaster()
+    forecast_rates = compute_realtime_forecast_rates(forecaster)
     summary = LIVE_INVENTORY.get_summary_report()
-    forecast_rates = {
-        "STEAK_WHOPPER": 0.65,
-        "STEAK_HAMB": 0.80,
-        "STEAK_MASTER": 0.45,
-        "FRITES_SURGELEES": 0.50,
-    }
     losses = LIVE_INVENTORY.calculate_potential_losses(forecast_rates)
     return {
         "inventory": summary,
         "potential_losses": losses,
+        "forecast_rates_per_min": forecast_rates,
     }
 
 
 @app.get("/api/leader/dashboard")
 def get_leader_dashboard():
-    """Vue simplifiée pour le Shift Leader : feux tricolores, unités concrètes, sans pourcentages."""
-    forecast_rates = {
-        "STEAK_WHOPPER": 0.65,
-        "STEAK_HAMB": 0.80,
-        "STEAK_MASTER": 0.45,
-        "FRITES_SURGELEES": 0.50,
-    }
+    """Vue simplifiée pour le Shift Leader : feux tricolores alimentés dynamiquement par le modèle LightGBM."""
+    forecaster = get_or_train_forecaster()
+    forecast_rates = compute_realtime_forecast_rates(forecaster)
     return {
         "role": "shift_leader",
         "cards": LIVE_INVENTORY.get_leader_view(forecast_rates),
+        "forecast_rates_per_min": forecast_rates,
         "sanitary_banner": "RÈGLE D'OR : Toute viande sortie du congélateur doit être cuite. Ne JAMAIS la recongeler.",
     }
 
 
 @app.get("/api/manager/dashboard")
 def get_manager_dashboard():
-    """Vue analytique pour le Manager : valorisations en euros, pourcentages de perte et marges."""
-    forecast_rates = {
-        "STEAK_WHOPPER": 0.65,
-        "STEAK_HAMB": 0.80,
-        "STEAK_MASTER": 0.45,
-        "FRITES_SURGELEES": 0.50,
+    """Vue analytique pour le Manager : valorisations en euros, pourcentages et risques IA alimentés par le modèle."""
+    forecaster = get_or_train_forecaster()
+    forecast_rates = compute_realtime_forecast_rates(forecaster)
+    return {
+        "role": "manager",
+        "analytics": LIVE_INVENTORY.get_manager_view(forecast_rates),
+        "forecast_rates_per_min": forecast_rates,
     }
     return {
         "role": "manager",
@@ -347,16 +524,179 @@ def tick_inventory_minute():
     }
 
 
+def build_dynamic_journal_from_test_data(
+    target_date: Optional[str] = None,
+    forecaster: Optional[DemandForecaster] = None,
+) -> Tuple[List[Dict], str]:
+    """Construit les 28 tranches de 30 min dynamiquement à partir des données réelles du test split et des prévisions LightGBM."""
+    if forecaster is None:
+        forecaster = get_or_train_forecaster()
+
+    available_dates = get_test_dates()
+    if not available_dates:
+        raise ValueError("Aucune date de test disponible dans le dataset.")
+
+    selected_date = target_date if (target_date and target_date in available_dates) else available_dates[0]
+    df_day = get_daily_test_data(selected_date)
+
+    preds = forecaster.predict(df_day)
+    df_merged = df_day.copy()
+    df_merged["mu"] = preds["mu"]
+    df_merged["q10"] = preds["q10"]
+    df_merged["q50"] = preds["q50"]
+    df_merged["q90"] = preds["q90"]
+
+    rows: List[Dict] = []
+    for p_time, group in df_merged.groupby("periode_30min"):
+        ca = 0.0
+        mu = 0.0
+        q10 = 0.0
+        q50 = 0.0
+        q90 = 0.0
+        reel = 0
+        for _, r in group.iterrows():
+            prod = r["produit"]
+            cfg = PRODUCTS.get(prod)
+            s = cfg.steaks_per_burger if cfg else 1
+            price = cfg.price_euros if cfg else 7.0
+            cmd = int(r["commandes"])
+            reel += cmd * s
+            ca += cmd * price
+            mu += float(r["mu"]) * s
+            q10 += float(r["q10"]) * s
+            q50 += float(r["q50"]) * s
+            q90 += float(r["q90"]) * s
+
+        dt = datetime.fromisoformat(str(p_time))
+        err = reel - mu
+        pot_loss = max(0.0, round(q90 - reel, 1)) if reel < q90 else 0.0
+        real_loss = max(0, int(round((q50 - reel) * 0.35))) if reel < q50 else 0
+
+        rows.append({
+            "periode_30min": dt,
+            "ca": round(ca, 2),
+            "prevision_mu": round(mu, 1),
+            "q10": round(q10, 1),
+            "q50": round(q50, 1),
+            "q90": round(q90, 1),
+            "reel": int(reel),
+            "erreur": round(err, 1),
+            "perte_potentielle": pot_loss,
+            "perte_reelle": real_loss,
+        })
+
+    rows.sort(key=lambda x: x["periode_30min"])
+    return rows, selected_date
+
+
+def build_dynamic_journal_from_live_tranches(
+    req: LiveExportRequest,
+    forecaster: Optional[DemandForecaster] = None,
+) -> Tuple[List[Dict], str]:
+    """Convertit les tranches en direct enregistrées par le navigateur lors du service actif en lignes de journal Excel."""
+    date_str = req.date or datetime.now().strftime("%Y-%m-%d")
+    rows: List[Dict] = []
+
+    for t in req.periods:
+        slot_hour = (t.k * 30) // 60
+        slot_min = (t.k * 30) % 60
+        dt_str = f"{date_str} {slot_hour:02d}:{slot_min:02d}:00"
+        try:
+            dt = datetime.strptime(dt_str, "%Y-%m-%d %H:%M:%S")
+        except Exception:
+            dt = datetime.now()
+
+        mu = float(t.pred) if t.pred > 0 else float(t.act or 15.0)
+        std_poisson = float(np.sqrt(max(1.0, mu)))
+        q10 = max(0.0, round(mu - 1.28 * std_poisson, 1))
+        q50 = round(mu, 1)
+        q90 = round(mu + 1.28 * std_poisson, 1)
+        reel = int(t.act)
+        err = round(reel - mu, 1)
+        pot_loss = max(0.0, float(t.cook - t.used)) if t.cook > t.used else 0.0
+        real_loss = int(t.waste)
+
+        rows.append({
+            "periode_30min": dt,
+            "ca": round(float(t.ca), 2),
+            "prevision_mu": round(mu, 1),
+            "q10": q10,
+            "q50": q50,
+            "q90": q90,
+            "reel": reel,
+            "erreur": err,
+            "perte_potentielle": round(pot_loss, 1),
+            "perte_reelle": real_loss,
+        })
+
+    rows.sort(key=lambda x: x["periode_30min"])
+    return rows, date_str
+
+
 @app.get("/api/export-excel")
-def download_excel():
-    """Télécharge le fichier Excel du journal par tranche de 30 min."""
-    if not EXCEL_FILE.exists():
-        # Générer à la volée si inexistant
-        run_simulation(policy_type="newsvendor", seed=42)
+def download_excel(
+    date: Optional[str] = Query(None, description="Date de service YYYY-MM-DD"),
+    source: Optional[str] = Query("real_data", description="Source: 'real_data' ou 'simulation'"),
+):
+    """Télécharge le fichier Excel du journal par tranche de 30 min généré DYNAMIQUEMENT.
+
+    Ne retourne JAMAIS un fichier statique figé :
+    - Calcule à la volée les prévisions du modèle LightGBM (mu, q10, q50, q90)
+    - Associe les commandes réelles et le CA pour la journée ciblée
+    - Applique le schéma de colonnes officiel et le formatage monétaire
+    """
+    forecaster = get_or_train_forecaster()
+    EXPORTS_DIR.mkdir(parents=True, exist_ok=True)
+
+    if source == "simulation":
+        target_day = datetime.strptime(date, "%Y-%m-%d").date() if date else datetime.now().date()
+        logs = simulate_day(target_day, decide_newsvendor, forecaster=forecaster)
+        rows = logs.journal_30min
+        date_str = str(logs.day)
+    else:
+        rows, date_str = build_dynamic_journal_from_test_data(date, forecaster)
+
+    export_path = EXPORTS_DIR / f"journal_braise_{date_str}.xlsx"
+    export_journal_to_excel(rows, export_path)
+
     return FileResponse(
-        path=EXCEL_FILE,
-        filename="journal_braise_30min.xlsx",
+        path=export_path,
+        filename=f"journal_braise_{date_str}.xlsx",
         media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0",
+        },
+    )
+
+
+@app.post("/api/export-excel/live")
+def download_live_excel(req: LiveExportRequest):
+    """Télécharge le fichier Excel généré dynamiquement à partir du service en direct de la cuisine."""
+    forecaster = get_or_train_forecaster()
+    EXPORTS_DIR.mkdir(parents=True, exist_ok=True)
+
+    if not req.periods:
+        rows, date_str = build_dynamic_journal_from_test_data(req.date, forecaster)
+        filename = f"journal_braise_{date_str}.xlsx"
+    else:
+        rows, date_str = build_dynamic_journal_from_live_tranches(req, forecaster)
+        timestamp_suffix = datetime.now().strftime("%H%M%S")
+        filename = f"journal_braise_live_{date_str}_{timestamp_suffix}.xlsx"
+
+    export_path = EXPORTS_DIR / filename
+    export_journal_to_excel(rows, export_path)
+
+    return FileResponse(
+        path=export_path,
+        filename=filename,
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0",
+        },
     )
 
 

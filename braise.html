@@ -33,7 +33,7 @@ main{position:relative;padding:0 clamp(16px,4vw,64px) 120px}
 .view{display:none}.view.on{display:grid;animation:vin .5s cubic-bezier(.2,.9,.2,1)}
 .bin h2,.bil h2{font:400 2.3rem 'Anton',Impact,sans-serif;letter-spacing:.06em;text-transform:uppercase}
 
-.bil{max-width:62rem}
+.bil{width:100%;max-width:100%}
 .tot{display:flex;flex-wrap:wrap;gap:12px 40px;margin:16px 0 26px}.tot div{min-width:7rem}.tot b{display:block;font:400 3rem/1 'Anton',Impact,sans-serif}.tot small{color:var(--dim)}
 .per{display:grid;grid-template-columns:8.5rem minmax(0,1fr) 4.5rem 4.5rem;gap:14px;align-items:center;padding:12px 0;border-top:1px solid var(--line);animation:vin .5s both}
 .per .bx{display:flex;height:22px;background:var(--surf);border-radius:4px;overflow:hidden}.per .bx i{display:block;height:100%;width:0;transition:width .7s}.u{background:var(--ember)}.w{background:var(--red)}
@@ -54,7 +54,7 @@ main{position:relative;padding:0 clamp(16px,4vw,64px) 120px}
 @keyframes ping{70%{box-shadow:0 0 0 9px transparent}100%{box-shadow:0 0 0 0 transparent}}
 @keyframes breathe{50%{transform:scale(1.3) rotate(45deg)}}
 @keyframes shim{to{background-position:-300% 0}}
-.inv-wrap{max-width:76rem;display:grid;gap:20px}
+.inv-wrap{width:100%;max-width:100%;display:grid;gap:20px}
 .inv-top{display:flex;flex-wrap:wrap;gap:14px 28px;align-items:center;justify-content:space-between;margin-bottom:8px}
 .inv-top h2{font:400 2.3rem 'Anton',Impact,sans-serif;letter-spacing:.06em;text-transform:uppercase}
 .inv-top .sub{color:var(--dim);font-size:.85rem}
@@ -90,148 +90,37 @@ main{position:relative;padding:0 clamp(16px,4vw,64px) 120px}
 .modal-act{display:flex;justify-content:flex-end;gap:10px;margin-top:10px}
 
 /* ============================================================
-   Styles enrichis pour l'écran Shift Leader (Terrain)
+   LEADER : mêmes composants que la Cuisine (.k-card, .k-btn, .k-ticket, .k-pill)
    ============================================================ */
-.leader-wrap{max-width:82rem;display:grid;gap:18px;padding-bottom:60px}
-.leader-hdr{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:14px;padding-bottom:12px;border-bottom:1px solid var(--line)}
-.leader-tag-pill{display:inline-block;padding:3px 10px;border-radius:99px;font:700 .72rem 'JetBrains Mono',monospace;letter-spacing:.08em;background:rgba(255,90,31,.15);color:var(--ember);border:1px solid rgba(255,90,31,.3);text-transform:uppercase;margin-bottom:4px}
-.leader-hdr h2{font:400 2.5rem/1.05 'Anton',Impact,sans-serif;letter-spacing:.06em;text-transform:uppercase}
-.leader-hdr p{color:var(--dim);font-size:.9rem}
-.leader-clock-pill{display:flex;flex-direction:column;align-items:flex-end;padding:8px 16px;background:var(--surf);border:1px solid var(--line);border-radius:10px}
-.leader-clock-pill span{font-size:1.4rem;font-weight:700;color:var(--fg)}
-.leader-clock-pill small{font-size:.76rem;color:var(--dim);text-transform:uppercase;letter-spacing:.04em}
-
-/* Bandeau 4 KPIs opérationnels terrain */
-.leader-kpis-bar{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
-.l-kpi-item{background:var(--surf);border:1.5px solid var(--line);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:14px;transition:box-shadow .3s,border-color .3s}
-.l-kpi-item.pulse-red{border-color:var(--red);box-shadow:0 0 20px rgba(229,56,59,.3);animation:red-glow-pulse 2s infinite}
-.l-kpi-icon{font-size:1.9rem;line-height:1}
-.l-kpi-val{font:400 1.8rem/1.1 'Anton',Impact,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:var(--fg)}
-.l-kpi-lbl{color:var(--dim);font-size:.78rem;margin-top:2px}
-.l-kpi-action{padding:6px;background:transparent;border:0}
-.l-btn-rush{width:100%;height:100%;min-height:64px;display:flex;align-items:center;justify-content:center;gap:12px;background:linear-gradient(90deg,var(--saf) 0%,var(--ember) 100%);color:var(--on);border-radius:12px;padding:10px 16px;cursor:pointer;border:0;transition:transform .12s,filter .2s;text-align:left;box-shadow:0 4px 14px rgba(255,90,31,.25)}
-.l-btn-rush:hover{filter:brightness(1.08)}
-.l-btn-rush:active{transform:scale(.97)}
-.l-rush-icon{font-size:1.6rem}
-.l-btn-rush b{display:block;font:400 1.2rem/1.1 'Anton',Impact,sans-serif;letter-spacing:.04em;text-transform:uppercase}
-.l-btn-rush small{display:block;font-size:.72rem;opacity:.95;margin-top:2px}
-
-/* Bandeau Conseil Anticipation IA pour le Leader */
-.leader-advice-box{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;padding:14px 20px;border-radius:12px;background:rgba(255,182,39,.12);border:1.5px solid var(--saf);color:var(--fg)}
-.l-advice-left{display:flex;align-items:center;gap:14px;flex:1;min-width:260px}
-.l-advice-bulb{font-size:1.8rem;line-height:1}
-.leader-advice-box b{display:block;font:400 1.15rem/1.2 'Anton',Impact,sans-serif;letter-spacing:.03em;text-transform:uppercase;color:var(--saf)}
-.leader-advice-box p{font-size:.88rem;color:var(--fg);margin-top:2px}
-.l-advice-btn{font:400 1.1rem 'Anton',Impact,sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:12px 22px;border-radius:8px;background:var(--saf);color:var(--on);border:0;cursor:pointer;transition:transform .12s,background-color .2s;white-space:nowrap}
-.l-advice-btn:hover{background:var(--ember);color:#fff}.l-advice-btn:active{transform:scale(.96)}
-
-/* Règle d'or Sanitaire HACCP */
-.shield-banner{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;padding:14px 20px;border-radius:12px;background:rgba(229,56,59,.1);border:1.5px solid var(--red);color:var(--fg)}
-.shield-left{display:flex;align-items:center;gap:14px;flex:1;min-width:280px}
-.shield-icon{font-size:2rem;line-height:1}
-.shield-title{color:var(--red);font:400 1.15rem 'Anton',Impact,sans-serif;letter-spacing:.05em;text-transform:uppercase}
-.shield-text{font-size:.86rem;margin-top:2px}
-.shield-chips{display:flex;flex-wrap:wrap;gap:8px}
-.shield-chip{display:inline-flex;align-items:center;padding:4px 10px;border-radius:6px;background:var(--surf);border:1px solid var(--line);font-size:.76rem;color:var(--fg)}
-.shield-chip b{color:var(--red);margin-left:4px}
-
-/* Filtres de vision rapide */
-.leader-filter-strip{display:flex;align-items:center;gap:8px;overflow-x:auto;padding-bottom:4px}
-.l-filter-label{font-size:.76rem;font-weight:700;letter-spacing:.06em;color:var(--dim);white-space:nowrap;font-family:'JetBrains Mono',monospace}
-.l-filter-pill{padding:8px 16px;border-radius:99px;border:1px solid var(--line);background:var(--surf);color:var(--dim);font-size:.84rem;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap}
-.l-filter-pill:hover{border-color:var(--fg);color:var(--fg)}
-.l-filter-pill.active{background:var(--fg);color:var(--bg);border-color:var(--fg)}
-
-/* Grille des cartes produits Leader */
-.leader-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:20px}
-.l-card{background:var(--surf);border-radius:16px;padding:22px;border:2px solid var(--line);display:flex;flex-direction:column;justify-content:space-between;gap:16px;transition:border-color .3s,box-shadow .3s,transform .2s}
-.l-card:hover{transform:translateY(-2px)}
-.l-card.RED{border-color:var(--red);background:linear-gradient(180deg,rgba(229,56,59,.12) 0%,var(--surf) 24%);box-shadow:0 6px 24px rgba(229,56,59,.25);animation:red-card-glow 2.5s infinite}
-.l-card.YELLOW{border-color:var(--saf);background:linear-gradient(180deg,rgba(255,182,39,.1) 0%,var(--surf) 24%)}
-.l-card.GREEN{border-color:rgba(46,158,107,.5);background:linear-gradient(180deg,rgba(46,158,107,.08) 0%,var(--surf) 24%)}
-
-/* En-tête de carte */
-.l-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:8px}
-.l-card-title-group{display:flex;align-items:center;gap:10px}
-.l-prod-icon{font-size:2.2rem;line-height:1}
-.l-card h3{font:400 2.2rem/1.05 'Anton',Impact,sans-serif;letter-spacing:.04em;text-transform:uppercase;margin:0}
-.l-card-sub{color:var(--dim);font-size:.8rem;margin-top:2px}
-.l-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:99px;font:700 .78rem 'JetBrains Mono',monospace;letter-spacing:.04em;white-space:nowrap}
-.l-badge.RED{background:var(--red);color:#fff;animation:badge-pulse 1.8s infinite}
-.l-badge.YELLOW{background:var(--saf);color:var(--on)}
-.l-badge.GREEN{background:var(--ok);color:var(--on)}
-
-/* Étiquette sanitaire */
-.l-sanitary-tag{display:inline-flex;align-items:center;gap:6px;padding:4px 9px;border-radius:6px;font-size:.72rem;font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:.03em;margin-top:6px}
-.l-sanitary-tag.strict{background:rgba(229,56,59,.15);color:var(--red);border:1px solid rgba(229,56,59,.3)}
-.l-sanitary-tag.returnable{background:rgba(46,158,107,.15);color:var(--ok);border:1px solid rgba(46,158,107,.3)}
-.l-sanitary-tag.side{background:rgba(255,182,39,.15);color:var(--saf);border:1px solid rgba(255,182,39,.3)}
-
-/* Bloc de stock : 2 colonnes visuelles */
-.l-stock-columns{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px 14px;background:rgba(0,0,0,.08);border-radius:10px;border:1px solid var(--line)}
-.l-stock-col{display:flex;flex-direction:column}
-.l-col-label{font-size:.72rem;font-family:'JetBrains Mono',monospace;text-transform:uppercase;color:var(--dim);letter-spacing:.05em}
-.l-col-main{display:flex;align-items:baseline;gap:6px;margin:2px 0}
-.l-col-main b{font:400 2.4rem/1 'Anton',Impact,sans-serif}
-.l-col-main small{font-size:.9rem;color:var(--dim)}
-.l-col-boxes{font-size:.76rem;color:var(--dim);font-family:'JetBrains Mono',monospace}
-
-/* Jauge visuelle de niveau (4 barres) */
-.l-meter{display:flex;gap:4px;margin-top:8px}
-.l-meter-bar{flex:1;height:6px;border-radius:3px;background:var(--line);transition:background-color .4s}
-.l-meter-bar.fill-red{background:var(--red)}
-.l-meter-bar.fill-yellow{background:var(--saf)}
-.l-meter-bar.fill-green{background:var(--ok)}
-
-/* Section des lots minutés */
-.l-batches-box{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
-.l-batches-hdr{display:flex;justify-content:space-between;align-items:center;font-size:.76rem;color:var(--dim);font-family:'JetBrains Mono',monospace;margin-bottom:6px}
-.l-batch-item{display:grid;gap:4px;padding:6px 0;border-top:1px solid var(--line)}
-.l-batch-item:first-child{border-top:0}
-.l-batch-row{display:flex;justify-content:space-between;align-items:center;font-size:.82rem}
-.l-batch-row b{font-family:'JetBrains Mono',monospace}
-.l-batch-timer{font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:700}
-.l-batch-timer.timer-red{color:var(--red);animation:badge-pulse 1.5s infinite}
-.l-batch-timer.timer-yellow{color:var(--saf)}
-.l-batch-timer.timer-green{color:var(--ok)}
-.l-batch-progress{width:100%;height:5px;background:var(--surf);border-radius:3px;overflow:hidden}
-.l-batch-bar-fill{height:100%;border-radius:3px;transition:width .4s}
-.l-batch-bar-fill.fill-green{background:var(--ok)}
-.l-batch-bar-fill.fill-yellow{background:var(--saf)}
-.l-batch-bar-fill.fill-red{background:var(--red)}
-
-/* Message d'action simple */
-.l-action-txt{font:500 .92rem 'Space Grotesk',sans-serif;padding:10px 14px;border-radius:8px;background:rgba(0,0,0,.15);border-left:4px solid var(--line);display:flex;align-items:center;gap:8px}
-.l-card.RED .l-action-txt{border-color:var(--red);color:var(--red);font-weight:700;background:rgba(229,56,59,.12)}
-.l-card.YELLOW .l-action-txt{border-color:var(--saf);color:var(--saf);font-weight:700;background:rgba(255,182,39,.12)}
-.l-card.GREEN .l-action-txt{border-color:var(--ok);color:var(--ok);background:rgba(46,158,107,.12)}
-
-/* Boutons tactiles */
-.l-actions-block{display:grid;gap:8px}
-.l-action-btns-row{display:grid;grid-template-columns:2fr 1fr;gap:8px}
-.l-btn-primary{font:400 1.4rem 'Anton',Impact,sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:14px 18px;border-radius:10px;background:var(--ember);color:var(--on);cursor:pointer;border:0;transition:transform .12s,background-color .2s;text-align:center}
-.l-btn-primary:hover{background:var(--saf)}.l-btn-primary:active{transform:scale(.96)}
-.l-btn-secondary{font:400 1.2rem 'Anton',Impact,sans-serif;letter-spacing:.04em;text-transform:uppercase;padding:14px 12px;border-radius:10px;background:var(--surf);border:2px solid var(--dim);color:var(--fg);cursor:pointer;transition:transform .12s,border-color .2s;text-align:center}
-.l-btn-secondary:hover{border-color:var(--fg)}.l-btn-secondary:active{transform:scale(.96)}
-.l-btn-return{width:100%;font:400 1.15rem 'Anton',Impact,sans-serif;letter-spacing:.04em;text-transform:uppercase;padding:12px;border-radius:10px;background:rgba(46,158,107,.18);border:2px solid var(--ok);color:var(--ok);cursor:pointer;transition:all .2s;text-align:center}
-.l-btn-return:hover{background:var(--ok);color:var(--on)}.l-btn-return:active{transform:scale(.96)}
-
-/* Animations */
-@keyframes red-card-glow{
-  0%,100%{box-shadow:0 0 16px rgba(229,56,59,.25);border-color:var(--red)}
-  50%{box-shadow:0 0 28px rgba(229,56,59,.55);border-color:#ff6f71}
-}
-@keyframes red-glow-pulse{
-  0%,100%{box-shadow:0 0 10px rgba(229,56,59,.2)}
-  50%{box-shadow:0 0 20px rgba(229,56,59,.45)}
-}
-@keyframes badge-pulse{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.05)}
-}
+.l-layout{display:grid;gap:var(--k-gap);width:100%;max-width:100%;padding-bottom:var(--k-gap)}
+.l-hdr{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.l-clock{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.l-clock b{font:700 1.5rem/1 'JetBrains Mono',ui-monospace,monospace}
+.l-unit{font-size:1.5rem;color:var(--dim)}
+.l-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.l-tile{display:flex;flex-direction:column;gap:8px;padding:16px;background:var(--bg);border:2px solid var(--line);border-radius:12px;cursor:pointer;transition:border-color .2s}
+.l-tile.r{border-color:var(--red)}
+.l-tile.on{outline:2px solid var(--fg);outline-offset:2px}
+.l-tile-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.l-tile .k-big{margin-top:4px}
+.l-tile .k-btn{width:100%;min-width:0;margin-top:8px}
+.l-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.l-lot{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.l-timer{font:500 .85rem/1.2 'JetBrains Mono',ui-monospace,monospace;white-space:nowrap}
+.l-timer.hot{color:var(--red);font-weight:700}
+.l-stepper{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-top:20px;padding-top:20px;border-top:1px solid var(--line)}
+.l-stepper .k-btn.icon{width:var(--k-btn-h);min-width:var(--k-btn-h);padding:0}
+.l-qty{min-width:120px;text-align:center;font:400 1.25rem/1 'Anton',Impact,sans-serif;letter-spacing:.06em;text-transform:uppercase}
+.l-stepper .k-btn.pri{flex:1}
+.l-undo{position:sticky;bottom:88px;z-index:20}
+.l-undo[hidden]{display:none}
+.l-undo .bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:8px 8px 8px 20px;background:var(--fg);color:var(--bg);border-radius:var(--k-r);font-weight:700}
+.l-undo .bar .k-btn.sec{color:var(--bg);border-color:var(--bg)}.l-undo .bar .k-btn.sec:hover:not(:disabled){border-color:var(--saf);color:var(--saf)}
+@media(max-width:1000px){.l-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.l-cols{grid-template-columns:1fr}}
+@media(max-width:640px){.l-grid{grid-template-columns:1fr}}
 
 /* Styles pour l'écran Manager */
-.mgr-wrap{max-width:76rem;display:grid;gap:22px}
+.mgr-wrap{width:100%;max-width:100%;display:grid;gap:22px}
 .mgr-hdr{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:14px}
 .mgr-hdr h2{font:400 2.4rem 'Anton',Impact,sans-serif;letter-spacing:.06em;text-transform:uppercase}
 .mgr-kpis-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
@@ -248,7 +137,8 @@ main{position:relative;padding:0 clamp(16px,4vw,64px) 120px}
    Échelle typographique : 0.75 label · 1 texte · 1.25 bouton · 1.5 titre/chiffre · 2.5 consigne
    Un seul gabarit de bouton (.k-btn, 52 px), une seule carte (.k-card)
    ============================================================ */
-#v-cuisine{--k-gap:20px;--k-pad:20px;--k-r:14px;--k-btn-h:52px;grid-template-columns:1fr;gap:var(--k-gap);align-content:start}
+:root{--k-gap:20px;--k-pad:20px;--k-r:14px;--k-btn-h:52px}
+#v-cuisine{grid-template-columns:1fr;gap:var(--k-gap);align-content:start}
 .k-layout{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:var(--k-gap);align-items:start}
 .k-col{display:grid;gap:var(--k-gap);min-width:0}
 .k-card{background:var(--surf);border:2px solid var(--line);border-radius:var(--k-r);padding:var(--k-pad);transition:border-color .3s}
@@ -261,7 +151,7 @@ main{position:relative;padding:0 clamp(16px,4vw,64px) 120px}
 .k-pill.hot{color:var(--red);border-color:var(--red)}
 .k-status{display:inline-flex;align-items:center;gap:8px;font:700 .75rem/1 'JetBrains Mono',ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase}
 .k-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--ok)}
-.k-dot.warn{background:var(--ember)}.k-dot.bad{background:var(--red)}
+.k-dot.warn{background:var(--ember)}.k-dot.mid{background:var(--saf)}.k-dot.bad{background:var(--red)}
 
 /* Bouton unique */
 .k-btn{display:inline-flex;align-items:center;justify-content:center;height:var(--k-btn-h);min-width:140px;padding:0 24px;border:2px solid transparent;border-radius:10px;font:400 1.25rem/1 'Anton',Impact,sans-serif;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;transition:transform .12s,background-color .2s,border-color .2s,color .2s,opacity .2s}
@@ -287,7 +177,7 @@ main{position:relative;padding:0 clamp(16px,4vw,64px) 120px}
 /* Tickets */
 .k-tickets{display:grid;gap:12px}
 .k-ticket{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center;padding:14px 16px;background:var(--bg);border:1.5px solid var(--line);border-left:8px solid var(--line);border-radius:10px}
-.k-ticket.late{border-left-color:var(--red)}.k-ticket.ready{border-left-color:var(--ok)}
+.k-ticket.late{border-left-color:var(--red)}.k-ticket.mid{border-left-color:var(--saf)}.k-ticket.ready{border-left-color:var(--ok)}
 .k-ticket-top{display:flex;align-items:center;gap:12px;margin-bottom:6px}
 .k-ticket-id{font:400 1.25rem/1 'Anton',Impact,sans-serif;letter-spacing:.06em}
 .k-ticket-lines{font-size:1rem}.k-ticket-lines b{font-weight:700}
@@ -372,78 +262,30 @@ main{position:relative;padding:0 clamp(16px,4vw,64px) 120px}
   </section>
   <!-- Écran Shift Leader (Terrain - Ultra-visuel, pas de formules ni pourcentages) -->
   <section class="view" id="v-leader">
-    <div class="leader-wrap">
-      <!-- En-tête Leader -->
-      <div class="leader-hdr">
+    <div class="l-layout">
+      <div class="l-hdr">
         <div>
-          <span class="leader-tag-pill">POSTE TERRAIN · CUISINE &amp; RÉSERVE</span>
-          <h2>Passe &amp; Réserve — Shift Leader</h2>
-          <p>Indicateurs visuels feux tricolores · Suivi des lots hors froid minute par minute · Sorties en 1 clic tactile</p>
+          <h2 class="k-big">Passe et réserve</h2>
+          <p class="k-meta">Shift leader</p>
         </div>
-        <div class="leader-clock-pill">
-          <span class="mono" id="leader-clock-sub">11:30</span>
-          <small id="leader-shift-name">Service Déjeuner</small>
-        </div>
+        <div class="l-clock"><b id="leader-clock-sub">11:30</b><span class="k-pill" id="leader-shift-name">Service déjeuner</span></div>
       </div>
-
-      <!-- Bandeau 4 KPIs opérationnels terrain -->
-      <div class="leader-kpis-bar">
-        <div class="l-kpi-item" id="l-kpi-alert-box">
-          <div class="l-kpi-icon" id="l-kpi-alert-icon">🟢</div>
-          <div>
-            <div class="l-kpi-val" id="l-kpi-alert-val">0 ALERTE</div>
-            <div class="l-kpi-lbl">Péremptions imminentes (&lt; 15 min)</div>
-          </div>
+      <div class="k-card">
+        <div class="k-card-head">
+          <h2 class="k-title">À faire maintenant</h2>
+          <span class="k-pill" id="l-actions-count">0</span>
         </div>
-        <div class="l-kpi-item">
-          <div class="l-kpi-icon">🥩</div>
-          <div>
-            <div class="l-kpi-val" id="l-kpi-meat-val">72 STEAKS</div>
-            <div class="l-kpi-lbl">Viandes en préparation (passe)</div>
-          </div>
-        </div>
-        <div class="l-kpi-item">
-          <div class="l-kpi-icon">❄️</div>
-          <div>
-            <div class="l-kpi-val" id="l-kpi-freezer-val">1 150 UNITÉS</div>
-            <div class="l-kpi-lbl">Stock sécurisé au congélateur</div>
-          </div>
-        </div>
-        <div class="l-kpi-item l-kpi-action">
-          <button class="l-btn-rush" id="l-btn-rush-quick" onclick="leaderQuickRushAction()">
-            <span class="l-rush-icon">⚡</span>
-            <div>
-              <b>SORTIE COUP DE FEU</b>
-              <small>+1 Boîte Whopper (12) &amp; +1 Hamb (15)</small>
-            </div>
-          </button>
-        </div>
+        <div class="k-tickets" id="l-actions"></div>
       </div>
-
-      <!-- Bandeau Conseil Anticipation IA pour le Leader -->
-      <div class="leader-advice-box" id="l-advice-box">
-        <div class="l-advice-left">
-          <span class="l-advice-bulb">💡</span>
-          <div>
-            <b id="l-advice-title">Anticipation du service (11h45)</b>
-            <p id="l-advice-msg">Le pic de midi approche. Assurez un minimum de 2 boîtes de Whopper et 2 boîtes de Hamb décongelées pour éviter l'attente client.</p>
-          </div>
+      <div class="k-card">
+        <div class="k-card-head">
+          <h2 class="k-title">Produits</h2>
+          <span class="k-label">Touchez un produit pour le détail</span>
         </div>
-        <button class="l-advice-btn" onclick="applyLeaderAdvice()">Appliquer le conseil (+2 boîtes)</button>
+        <div class="l-grid" id="leader-cards"></div>
       </div>
-
-      <!-- Filtres de vision rapide pour le leader -->
-      <div class="leader-filter-strip">
-        <span class="l-filter-label">FILTRER :</span>
-        <button class="l-filter-pill active" data-filter="all" onclick="setLeaderFilter('all')">Tous les produits</button>
-        <button class="l-filter-pill" data-filter="alert" onclick="setLeaderFilter('alert')">🚨 Alertes prioritaires (<span id="l-filter-alert-count">0</span>)</button>
-        <button class="l-filter-pill" data-filter="meat" onclick="setLeaderFilter('meat')">🥩 Viandes (Strict)</button>
-        <button class="l-filter-pill" data-filter="side" onclick="setLeaderFilter('side')">🍟 Frites &amp; Pains</button>
-        <button class="l-filter-pill" data-filter="ice" onclick="setLeaderFilter('ice')">🍦 Glaces (Réintégrable)</button>
-      </div>
-
-      <!-- Grille des cartes produits -->
-      <div class="leader-grid" id="leader-cards"></div>
+      <div class="k-card" id="l-detail"></div>
+      <div class="l-undo" id="l-undo" hidden></div>
     </div>
   </section>
 
@@ -585,7 +427,7 @@ const INV={
     STEAK_MASTER:{n:'Steaks Master',t:'meat',f:250,max:60,p:[{id:3,q:18,a:10,max:60}],canRet:false,u:'steaks',cost:1.10,prodIdx:2},
     MIX_GLACE:{n:'Bacs Glace Vanille',t:'ice',f:50,max:null,p:[{id:4,q:6,a:15,max:null}],canRet:true,u:'bacs',cost:3.20,prodIdx:null},
     FRITES_SURGELEES:{n:'Sachets Frites 2.5kg',t:'side',f:80,max:120,p:[{id:5,q:8,a:20,max:120}],canRet:false,u:'sachets',cost:1.80,prodIdx:null},
-    PAINS_BUNS:{n:'Pains Burgers (Buns)',t:'dry',f:0,max:null,p:[{id:6,q:350,a:0,max:null}],canRet:false,u:'pains',cost:.25,prodIdx:null}
+    PAINS_BUNS:{n:'Pains Burgers (Buns)',t:'dry',f:600,max:null,p:[{id:6,q:350,a:0,max:null}],canRet:false,u:'pains',cost:.25,prodIdx:null}
   },
   wastedRaw:0,
   returnedIce:0
@@ -614,6 +456,20 @@ function tick(){
         }
         return true;
       });
+    });
+
+    // Consommation des produits hors viande (proportionnelle au débit de burgers)
+    const burgersMin = lamB(T) * surge;
+    const USE = {PAINS_BUNS: burgersMin, FRITES_SURGELEES: burgersMin * .024, MIX_GLACE: burgersMin * .004};
+    Object.entries(USE).forEach(([sku, rate]) => {
+      const it = INV.items[sku];
+      it.use = (it.use || 0) + rate;
+      let k = Math.floor(it.use);
+      if(k <= 0) return;
+      it.use -= k;
+      it.p.sort((a, b) => b.a - a.a);
+      for(const b of it.p){ const t = Math.min(b.q, k); b.q -= t; k -= t; if(k <= 0) break; }
+      it.p = it.p.filter(b => b.q > 0);
     });
 
     // Vieillissement des tickets KDS en attente
@@ -696,7 +552,7 @@ function launch(){
   }
 
   toast(`Lancé : ${cur.q} steaks ${p.n}`);
-  autoWait=0;cur=null;decide();render();
+  autoWait=0;cur=null;decide();render();syncLeaderForecast();
 }
 function ignore(){if(!cur)return;S[cur.i].snooze=T+4;toast(`Ignoré pour 4 min : ${S[cur.i].n}`);cur=null;decide();render()}
 function render(){
@@ -742,23 +598,19 @@ function bilan(){
 }
 
 const LEADER_PROD_META = {
-  STEAK_WHOPPER: { icon: '🥩', packSize: 12, packLabel: 'Carton de 12 steaks', cookTime: 'Cuisson 6 min' },
-  STEAK_HAMB: { icon: '🍔', packSize: 15, packLabel: 'Carton de 15 steaks', cookTime: 'Cuisson 4 min' },
-  STEAK_MASTER: { icon: '👑', packSize: 10, packLabel: 'Carton de 10 steaks', cookTime: 'Cuisson 8 min' },
-  MIX_GLACE: { icon: '🍦', packSize: 2, packLabel: 'Carton de 2 bacs (5L)', cookTime: 'Prêt à servir' },
-  FRITES_SURGELEES: { icon: '🍟', packSize: 4, packLabel: 'Carton de 4 sachets (10kg)', cookTime: 'Friteuse 3 min' },
-  PAINS_BUNS: { icon: '🍞', packSize: 50, packLabel: 'Carton de 50 buns', cookTime: 'Toasteur 20s' }
+  STEAK_WHOPPER: { short: 'Whopper', packSize: 12, cook: 'Cuisson 6 min', rule: 'Sortie définitive : jamais de retour au froid (HACCP)' },
+  STEAK_HAMB: { short: 'Hamb', packSize: 15, cook: 'Cuisson 4 min', rule: 'Sortie définitive : jamais de retour au froid (HACCP)' },
+  STEAK_MASTER: { short: 'Master', packSize: 10, cook: 'Cuisson 8 min', rule: 'Sortie définitive : jamais de retour au froid (HACCP)' },
+  MIX_GLACE: { short: 'Glace vanille', packSize: 2, cook: 'Prêt à servir', rule: 'Réintégrable au congélateur en fin de service' },
+  FRITES_SURGELEES: { short: 'Frites', packSize: 4, cook: 'Friteuse 3 min', rule: 'Surgelé : friture directe' },
+  PAINS_BUNS: { short: 'Pains', packSize: 50, cook: 'Toasteur 20 s', rule: 'Stock sec : rotation standard' }
 };
 
-let leaderFilter = 'all';
-
-function setLeaderFilter(f){
-  leaderFilter = f;
-  document.querySelectorAll('.l-filter-pill').forEach(b => {
-    b.classList.toggle('active', b.dataset.filter === f);
-  });
-  renderLeader();
-}
+// Seuils uniques de l'écran Leader (minutes) — à aligner sur config.py
+const LT = { urgent: 10, watch: 20, trigger: 15, target: 20, expUrgent: 5, expWatch: 15, closing: 1380, undoMs: 8000, maxBoxes: 4 };
+let leaderSel = null, leaderCart = 1, lastOut = null, undoTimer = null;
+const LEVEL_TXT = ['OK', 'À surveiller', 'Urgent'];
+const LEVEL_DOT = ['', 'mid', 'bad'];
 
 function playClickSound(freq=520, type='sine', dur=0.07){
   try {
@@ -777,20 +629,6 @@ function playClickSound(freq=520, type='sine', dur=0.07){
     osc.start();
     osc.stop(window._audioCtx.currentTime + dur);
   } catch(e){}
-}
-
-function leaderQuickRushAction(){
-  playClickSound(640, 'triangle', 0.12);
-  quickLeaderCheckout('STEAK_WHOPPER', 12);
-  quickLeaderCheckout('STEAK_HAMB', 15);
-  toast('⚡ Sortie coup de feu validée : +12 Whopper & +15 Hamb prêts en passe !');
-}
-
-function applyLeaderAdvice(){
-  playClickSound(640, 'triangle', 0.12);
-  quickLeaderCheckout('STEAK_WHOPPER', 12);
-  quickLeaderCheckout('STEAK_HAMB', 15);
-  toast('💡 Recommandation appliquée : stock préparé pour le rush !');
 }
 
 function ticketDemand(){
@@ -935,301 +773,206 @@ function quickGrillProduct(sku, qty){
   render();
 }
 
-function renderLeader(){
-  const container = $('#leader-cards');
-  if(!container) return;
+let backendLeaderRates = null;
 
-  // Calcul des KPIs opérationnels du Shift
-  let alertCount = 0;
-  let totalPrepMeat = 0;
-  let totalFreezerStock = 0;
-
-  Object.entries(INV.items).forEach(([sku, it]) => {
-    const prepCount = sum(it.p, 'q');
-    totalFreezerStock += it.f;
-    if(it.t === 'meat') totalPrepMeat += prepCount;
-
-    let earliestExp = 999;
-    if(it.max){
-      it.p.forEach(b => {
-        const left = Math.max(0, it.max - b.a);
-        earliestExp = Math.min(earliestExp, left);
-      });
+async function syncLeaderForecast(){
+  try {
+    const res = await fetch('/api/leader/dashboard');
+    if(res.ok){
+      const data = await res.json();
+      if(data.forecast_rates_per_min){
+        backendLeaderRates = data.forecast_rates_per_min;
+        if(view === 'leader') renderLeader();
+      }
     }
-
-    const isCritical = prepCount <= (it.t === 'meat' ? 6 : 2) || (earliestExp !== 999 && earliestExp <= 10);
-    if(isCritical) alertCount++;
-  });
-
-  const alertBox = $('#l-kpi-alert-box');
-  const alertVal = $('#l-kpi-alert-val');
-  const alertIcon = $('#l-kpi-alert-icon');
-  if(alertVal){
-    if(alertCount > 0){
-      alertVal.textContent = `${alertCount} ALERTE${alertCount > 1 ? 'S' : ''} !`;
-      alertVal.style.color = 'var(--red)';
-      if(alertIcon) alertIcon.textContent = '🚨';
-      if(alertBox) alertBox.classList.add('pulse-red');
-    } else {
-      alertVal.textContent = '0 ALERTE · OK';
-      alertVal.style.color = 'var(--ok)';
-      if(alertIcon) alertIcon.textContent = '🟢';
-      if(alertBox) alertBox.classList.remove('pulse-red');
-    }
-  }
-  const meatVal = $('#l-kpi-meat-val');
-  if(meatVal) meatVal.textContent = `${totalPrepMeat} STEAKS`;
-  const freezerVal = $('#l-kpi-freezer-val');
-  if(freezerVal) freezerVal.textContent = `${totalFreezerStock.toLocaleString('fr-FR')} UNITÉS`;
-  const filterAlertCount = $('#l-filter-alert-count');
-  if(filterAlertCount) filterAlertCount.textContent = alertCount;
-  const clockSub = $('#leader-clock-sub');
-  if(clockSub) clockSub.textContent = fmt(T);
-  const shiftName = $('#leader-shift-name');
-  if(shiftName){
-    shiftName.textContent = (T < 900) ? 'Service Déjeuner' : ((T < 1140) ? 'Service Après-Midi' : 'Service Soir');
-  }
-
-  // Boîte conseil IA Leader
-  const adviceTitle = $('#l-advice-title');
-  const adviceMsg = $('#l-advice-msg');
-  if(adviceTitle && adviceMsg){
-    if(T < 720){
-      adviceTitle.textContent = `Anticipation Coup de Feu Déjeuner (${fmt(T)})`;
-      adviceMsg.textContent = `Le pic de midi approche. Prévoyez de décongeler 2 boîtes de Whopper et 2 boîtes de Hamb pour absorber l'afflux sans attente client.`;
-    } else if(T < 840){
-      adviceTitle.textContent = `Plein Rush Déjeuner (${fmt(T)})`;
-      adviceMsg.textContent = `Forte rotation en cuisine : veillez à lancer la cuisson des steaks Whopper dès que le stock passe sous 8 unités.`;
-    } else if(T < 1140){
-      adviceTitle.textContent = `Heures calmes de l'après-midi (${fmt(T)})`;
-      adviceMsg.textContent = `Maintenez les sorties au minimum (1 seule boîte à la fois) pour éviter que la viande ne dépasse la limite des 60 minutes hors froid.`;
-    } else {
-      adviceTitle.textContent = `Rush Soirée & Étudiants (${fmt(T)})`;
-      adviceMsg.textContent = `Volume élevé attendu : préparez les bacs de frites et pré-décongelez les steaks Master pour les commandes menu XL.`;
-    }
-  }
-
-  // Préparation de la liste des produits
-  let itemsList = Object.entries(INV.items).map(([sku, it]) => {
-    const meta = LEADER_PROD_META[sku] || { icon: '📦', packSize: 1, packLabel: 'Unité', cookTime: '-' };
-    const prepCount = sum(it.p, 'q');
-    let earliestExp = 999;
-    if(it.max){
-      it.p.forEach(b => {
-        const left = Math.max(0, it.max - b.a);
-        earliestExp = Math.min(earliestExp, left);
-      });
-    }
-
-    let color = 'GREEN', badge = '🟢 STOCK FLUIDE', urgency = 0;
-    let msg = 'Stock prêt suffisant pour absorber le rythme actuel.';
-
-    const critThreshold = it.t === 'meat' ? 6 : (it.t === 'ice' ? 2 : 2);
-    const warnThreshold = it.t === 'meat' ? 16 : (it.t === 'ice' ? 4 : 5);
-
-    if(prepCount <= critThreshold || (earliestExp !== 999 && earliestExp <= 10)){
-      color = 'RED';
-      badge = '🔴 ACTION URGENTE';
-      urgency = 2;
-      msg = prepCount <= critThreshold 
-        ? 'Stock critique en passe : sortir 1 boîte immédiatement !' 
-        : `Alerte péremption : lot hors froid à cuire sous ${earliestExp} min sinon jeté !`;
-    } else if(prepCount <= warnThreshold || (earliestExp !== 999 && earliestExp <= 25)){
-      color = 'YELLOW';
-      badge = '🟡 ATTENTION';
-      urgency = 1;
-      msg = 'Stock en baisse : prévoir 1 boîte de réserve sous 10 minutes.';
-    }
-
-    return { sku, it, meta, prepCount, earliestExp, color, badge, urgency, msg };
-  });
-
-  // Tri par priorité opérationnelle : ROUGE d'abord, puis JAUNE, puis VERT
-  itemsList.sort((a,b) => b.urgency - a.urgency);
-
-  // Filtrage selon l'onglet actif
-  if(leaderFilter === 'alert'){
-    itemsList = itemsList.filter(x => x.urgency > 0);
-  } else if(leaderFilter === 'meat'){
-    itemsList = itemsList.filter(x => x.it.t === 'meat');
-  } else if(leaderFilter === 'side'){
-    itemsList = itemsList.filter(x => x.it.t === 'side' || x.it.t === 'dry');
-  } else if(leaderFilter === 'ice'){
-    itemsList = itemsList.filter(x => x.it.t === 'ice');
-  }
-
-  container.innerHTML = '';
-
-  if(itemsList.length === 0){
-    container.innerHTML = `
-      <div style="grid-column:1/-1;background:var(--surf);border:2px dashed var(--ok);border-radius:14px;padding:40px;text-align:center">
-        <div style="font-size:3rem">🎉</div>
-        <h3 style="font:400 2.2rem 'Anton',Impact,sans-serif;margin:10px 0 6px;text-transform:uppercase;color:var(--ok)">Aucune alerte prioritaire</h3>
-        <p style="color:var(--dim)">Tous les stocks sélectionnés sont sous contrôle et aucun lot ne risque d'expirer.</p>
-      </div>
-    `;
-    return;
-  }
-
-  itemsList.forEach(({ sku, it, meta, prepCount, earliestExp, color, badge, urgency, msg }) => {
-    const packSize = meta.packSize;
-    const prepBoxes = Math.ceil(prepCount / packSize);
-    const freezerBoxes = Math.floor(it.f / packSize);
-
-    // Calcul de la jauge (0 à 4 barres)
-    let gaugeLevel = 0;
-    if(prepCount > 0){
-      if(color === 'RED') gaugeLevel = 1;
-      else if(color === 'YELLOW') gaugeLevel = 2;
-      else gaugeLevel = prepCount >= 30 ? 4 : 3;
-    }
-
-    // Rendu des lots minutés
-    let batchesHtml = '';
-    if(it.p.length === 0){
-      batchesHtml = `<div style="font-size:.82rem;color:var(--red);padding:6px 0;font-weight:600">⚠️ Aucun lot en préparation — Rupture immédiate si commande !</div>`;
-    } else {
-      const sortedP = [...it.p].sort((a,b) => b.a - a.a);
-      batchesHtml = sortedP.map((b, idx) => {
-        const isOldest = idx === 0 && sortedP.length > 1;
-        const timeLeft = it.max ? Math.max(0, it.max - b.a) : null;
-        let timerClass = 'timer-green';
-        let fillClass = 'fill-green';
-        let progressPct = 100;
-        if(timeLeft !== null){
-          progressPct = Math.min(100, Math.max(4, Math.round((timeLeft / it.max) * 100)));
-          if(timeLeft <= 15){
-            timerClass = 'timer-red';
-            fillClass = 'fill-red';
-          } else if(timeLeft <= 30){
-            timerClass = 'timer-yellow';
-            fillClass = 'fill-yellow';
-          }
-        }
-        return `
-          <div class="l-batch-item">
-            <div class="l-batch-row">
-              <span><b>Lot #${b.id}</b> : ${b.q} ${it.u} ${isOldest ? '<span style="font-size:.68rem;padding:2px 6px;border-radius:4px;background:rgba(255,90,31,.2);color:var(--ember);font-weight:700">À CUIRE EN 1ER</span>' : ''}</span>
-              <span class="l-batch-timer ${timerClass}">
-                ${timeLeft !== null ? `⏱ ${timeLeft} min restante(s)` : '🟢 Prêt'}
-              </span>
-            </div>
-            ${timeLeft !== null ? `
-              <div class="l-batch-progress">
-                <div class="l-batch-bar-fill ${fillClass}" style="width:${progressPct}%"></div>
-              </div>
-            ` : ''}
-          </div>
-        `;
-      }).join('');
-    }
-
-    const card = document.createElement('div');
-    card.className = `l-card ${color}`;
-    card.innerHTML = `
-      <div>
-        <div class="l-card-head">
-          <div class="l-card-title-group">
-            <span class="l-prod-icon">${meta.icon}</span>
-            <div>
-              <h3>${it.n}</h3>
-              <div class="l-card-sub">${meta.packLabel} · ${meta.cookTime}</div>
-            </div>
-          </div>
-          <span class="l-badge ${color}">${badge}</span>
-        </div>
-
-        <div>
-          ${it.canRet 
-            ? `<span class="l-sanitary-tag returnable">🔄 RÉINTÉGRABLE AU CONGÉLATEUR (FIN DE SERVICE)</span>`
-            : (it.t === 'meat'
-                ? `<span class="l-sanitary-tag strict">🔒 SORTIE DÉFINITIVE · JAMAIS AU FROID (HACCP)</span>`
-                : (it.t === 'side'
-                    ? `<span class="l-sanitary-tag side">🍟 SURGELÉ · FRITURE DIRECTE</span>`
-                    : `<span class="l-sanitary-tag side">🍞 STOCK AMBIANT · ROTATION STANDARD</span>`))
-          }
-        </div>
-
-        <div class="l-stock-columns" style="margin-top:12px">
-          <div class="l-stock-col">
-            <span class="l-col-label">En Passe (Prêt à cuire)</span>
-            <div class="l-col-main">
-              <b>${prepCount}</b>
-              <small>${it.u}</small>
-            </div>
-            <div class="l-col-boxes">${prepBoxes} carton(s) entamé(s)</div>
-          </div>
-          <div class="l-stock-col">
-            <span class="l-col-label">En Réserve (Congélateur)</span>
-            <div class="l-col-main">
-              <b style="color:var(--dim)">${it.f}</b>
-              <small>${it.u}</small>
-            </div>
-            <div class="l-col-boxes">${freezerBoxes} carton(s) pleins</div>
-          </div>
-        </div>
-
-        <div class="l-meter" title="Niveau de stock en passe">
-          <div class="l-meter-bar ${gaugeLevel>=1 ? (gaugeLevel===1?'fill-red':(gaugeLevel===2?'fill-yellow':'fill-green')) : ''}"></div>
-          <div class="l-meter-bar ${gaugeLevel>=2 ? (gaugeLevel===2?'fill-yellow':'fill-green') : ''}"></div>
-          <div class="l-meter-bar ${gaugeLevel>=3 ? 'fill-green' : ''}"></div>
-          <div class="l-meter-bar ${gaugeLevel>=4 ? 'fill-green' : ''}"></div>
-        </div>
-
-        <div class="l-batches-box" style="margin-top:12px">
-          <div class="l-batches-hdr">
-            <span>Lots en préparation (${it.p.length})</span>
-            <span>${it.max ? 'Limite hors froid : '+it.max+' min' : 'Sans limite'}</span>
-          </div>
-          ${batchesHtml}
-        </div>
-
-        <div class="l-action-txt" style="margin-top:12px">
-          <span>${color === 'RED' ? '🚨' : (color === 'YELLOW' ? '⚠️' : '✅')}</span>
-          <span>${msg}</span>
-        </div>
-      </div>
-
-      <div class="l-actions-block">
-        <div class="l-action-btns-row">
-          <button class="l-btn-primary" onclick="quickLeaderCheckout('${sku}', ${packSize})">
-            +1 Boîte (${packSize} ${it.u})
-          </button>
-          <button class="l-btn-secondary" onclick="quickLeaderCheckout('${sku}', ${packSize * 2})">
-            +2 Boîtes
-          </button>
-        </div>
-        ${it.canRet && prepCount > 0 ? `
-          <button class="l-btn-return" onclick="quickLeaderReturnIce('${sku}')">
-            ↩ Ranger au congélateur (${Math.min(prepCount, 2)} ${it.u})
-          </button>
-        ` : ''}
-      </div>
-    `;
-    container.appendChild(card);
-  });
+  } catch(e){}
 }
+
+function leaderRate(sku){
+  if(backendLeaderRates && backendLeaderRates[sku]){
+    return Math.max(0.01, backendLeaderRates[sku] * surge);
+  }
+  const it = INV.items[sku];
+  if(it.prodIdx != null) return Math.max(.05, mu(S[it.prodIdx], 15) / 15);
+  const b = lamB(T) * surge;
+  return Math.max(.01, sku === 'PAINS_BUNS' ? b : sku === 'FRITES_SURGELEES' ? b * .024 : b * .004);
+}
+
+function leaderInfo(sku){
+  const it = INV.items[sku], meta = LEADER_PROD_META[sku];
+  const prep = sum(it.p, 'q'), rate = leaderRate(sku);
+  const aut = prep > 0 ? prep / rate : 0;
+  let exp = null;
+  if(it.max) it.p.forEach(b => { const l = Math.max(0, it.max - b.a); if(exp === null || l < exp) exp = l; });
+  const autLvl = aut < LT.urgent ? 2 : aut < LT.watch ? 1 : 0;
+  const expLvl = (exp !== null && prep > 0) ? (exp <= LT.expUrgent ? 2 : exp <= LT.expWatch ? 1 : 0) : 0;
+  const need = Math.max(1, Math.ceil((rate * LT.target - prep) / meta.packSize));
+  const qty = Math.min(Math.min(need, LT.maxBoxes) * meta.packSize, it.f);
+  return { sku, it, meta, prep, rate, aut, exp, level: Math.max(autLvl, expLvl), qty, boxes: Math.ceil(qty / meta.packSize), capped: need > LT.maxBoxes };
+}
+
+function fmtAut(i){ return i.aut >= 99 ? '99+' : String(Math.round(i.aut)); }
+function plural(n, w){ return n + ' ' + w + (n > 1 ? 's' : ''); }
+
+function leaderSelect(sku){
+  leaderSel = sku; leaderCart = 1;
+  renderLeader();
+  const d = $('#l-detail'); if(d) d.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+}
+function leaderStep(d){
+  const info = leaderInfo(leaderSel);
+  const max = Math.max(1, Math.floor(info.it.f / info.meta.packSize));
+  leaderCart = Math.max(1, Math.min(leaderCart + d, max));
+  renderLeader();
+}
+
+function renderLeader(){
+  const grid = $('#leader-cards');
+  if(!grid) return;
+  const infos = Object.keys(INV.items).map(leaderInfo);
+  $('#leader-clock-sub').textContent = fmt(T);
+  $('#leader-shift-name').textContent = T < 900 ? 'Service déjeuner' : (T < 1140 ? 'Service après-midi' : 'Service soir');
+
+  // 1. Actions rapides, triées par urgence
+  const acts = [];
+  infos.forEach(i => {
+    if(i.it.f > 0 && i.aut < LT.trigger) acts.push({ k: 'out', i, urg: i.aut });
+    if(i.exp !== null && i.prep > 0 && i.exp <= LT.expUrgent) acts.push({ k: 'lot', i, urg: i.exp });
+    if(i.it.canRet && T >= LT.closing && i.prep > 0) acts.push({ k: 'ret', i, urg: 60 });
+  });
+  acts.sort((a, b) => a.urg - b.urg);
+  $('#l-actions-count').textContent = acts.length ? acts.length + ' à traiter' : 'Tout est OK';
+  const list = $('#l-actions');
+  list.innerHTML = '';
+  if(!acts.length) list.innerHTML = '<div class="k-empty">Rien à faire pour l\'instant. Les stocks tiennent au rythme prévu.</div>';
+  acts.slice(0, 4).forEach(a => {
+    const i = a.i, n = i.meta.short, el = document.createElement('div');
+    let title, sub, label, fn, cls;
+    if(a.k === 'out'){
+      title = `${n} : ${i.prep <= 0 ? 'plus de stock en passe' : 'autonomie ' + fmtAut(i) + ' min'}`;
+      sub = i.capped ? `Sortir ${plural(i.boxes, 'carton')} (${i.qty} ${i.it.u}), puis réévaluer` : `Sortir ${plural(i.boxes, 'carton')} (${i.qty} ${i.it.u}) pour tenir ${LT.target} min`;
+      label = `Sortir ${i.qty}`; fn = () => leaderOut(i.sku, i.qty); cls = i.aut < LT.urgent ? 'late' : 'mid';
+    } else if(a.k === 'lot'){
+      title = `${n} : lot à cuire sous ${i.exp} min`;
+      sub = 'À cuire en priorité, sinon il sera jeté';
+      label = 'Voir le lot'; fn = () => leaderSelect(i.sku); cls = 'late';
+    } else {
+      title = `${n} : fin de service`;
+      sub = `Ranger ${i.prep} ${i.it.u} au congélateur`;
+      label = `Ranger ${i.prep}`; fn = () => quickLeaderReturnIce(i.sku); cls = 'mid';
+    }
+    el.className = 'k-ticket ' + cls;
+    el.innerHTML = `<div><span class="k-ticket-id">${title}</span><p class="k-meta">${sub}</p></div><button class="k-btn pri" type="button">${label}</button>`;
+    el.querySelector('.k-btn').onclick = fn;
+    list.appendChild(el);
+  });
+  if(acts.length > 4){
+    const m = document.createElement('div'); m.className = 'k-more';
+    m.textContent = `+ ${acts.length - 4} autre${acts.length - 4 > 1 ? 's' : ''} action${acts.length - 4 > 1 ? 's' : ''}`;
+    list.appendChild(m);
+  }
+
+  // 2. Tuiles produit (ordre fixe : les positions ne bougent jamais)
+  if(!leaderSel || !INV.items[leaderSel]){
+    leaderSel = [...infos].sort((a, b) => b.level - a.level || a.aut - b.aut)[0].sku;
+  }
+  grid.innerHTML = '';
+  infos.forEach(i => {
+    const el = document.createElement('div');
+    el.className = 'l-tile' + (i.level === 2 ? ' r' : '') + (leaderSel === i.sku ? ' on' : '');
+    el.onclick = () => leaderSelect(i.sku);
+    const empty = i.it.f <= 0;
+    el.innerHTML = `
+      <div class="l-tile-top"><h3 class="k-name">${i.meta.short}</h3><span class="k-status"><i class="k-dot ${LEVEL_DOT[i.level]}"></i>${LEVEL_TXT[i.level]}</span></div>
+      <p class="k-big">${fmtAut(i)} <span class="l-unit">min</span></p>
+      <span class="k-sub">${i.prep} en passe · ${i.it.f} en réserve</span>
+      <button class="k-btn ${i.level > 0 && !empty ? 'pri' : 'sec'}" type="button" ${empty ? 'disabled' : ''}>${empty ? 'Réserve vide' : '+1 carton (' + i.meta.packSize + ')'}</button>`;
+    el.querySelector('.k-btn').onclick = e => { e.stopPropagation(); leaderOut(i.sku, i.meta.packSize); };
+    grid.appendChild(el);
+  });
+
+  // 3. Détail du produit sélectionné
+  const d = infos.find(x => x.sku === leaderSel), it = d.it, pack = d.meta.packSize;
+  const lots = [...it.p].sort((a, b) => b.a - a.a);
+  const lotsHtml = lots.length ? lots.map((b, idx) => {
+    const left = it.max ? Math.max(0, it.max - b.a) : null;
+    const hot = left !== null && left <= LT.expWatch;
+    return `<div class="l-lot"><span><b>Lot #${b.id}</b> · ${b.q} ${it.u}${idx === 0 && lots.length > 1 ? ' <span class="k-pill">à cuire en premier</span>' : ''}</span><span class="l-timer${hot ? ' hot' : ''}">${left !== null ? left + ' min restantes' : 'sans limite'}</span></div>`;
+  }).join('') : '<div class="l-lot"><span class="k-meta">Aucun lot en passe</span></div>';
+  const maxCart = Math.max(1, Math.floor(it.f / pack));
+  if(leaderCart > maxCart) leaderCart = maxCart;
+  const outQty = Math.min(leaderCart * pack, it.f);
+  $('#l-detail').innerHTML = `
+    <div class="k-card-head"><h2 class="k-title">Détail · ${d.meta.short}</h2><span class="k-status"><i class="k-dot ${LEVEL_DOT[d.level]}"></i>${LEVEL_TXT[d.level]}</span></div>
+    <div class="l-cols">
+      <div><span class="k-label">Lots en passe, du plus ancien au plus récent</span>${lotsHtml}</div>
+      <div>
+        <span class="k-label">Réserve</span>
+        <p class="k-big">${it.f} <span class="l-unit">${it.u}</span></p>
+        <p class="k-meta">${Math.floor(it.f / pack)} cartons pleins · carton de ${pack} ${it.u} · ${d.meta.cook}</p>
+        <p class="k-why">${d.meta.rule}</p>
+        <p class="k-hint">Rythme prévu : ${Math.max(1, Math.round(d.rate * 60)).toLocaleString('fr-FR')} ${it.u} par heure</p>
+      </div>
+    </div>
+    <div class="l-stepper">
+      <button class="k-btn sec icon" type="button" aria-label="Moins un carton" onclick="leaderStep(-1)">−</button>
+      <span class="l-qty">${plural(leaderCart, 'carton')}</span>
+      <button class="k-btn sec icon" type="button" aria-label="Plus un carton" onclick="leaderStep(1)">+</button>
+      <button class="k-btn pri" type="button" ${it.f <= 0 ? 'disabled' : ''} onclick="leaderOut('${d.sku}', ${leaderCart * pack})">Sortir ${outQty} ${it.u}</button>
+      ${it.canRet && d.prep > 0 ? `<button class="k-btn sec" type="button" onclick="quickLeaderReturnIce('${d.sku}')">Ranger au congélateur</button>` : ''}
+    </div>`;
+}
+
+// Sortie du congélateur : appliquée tout de suite, annulable pendant 8 s
+function leaderOut(sku, qty){ quickLeaderCheckout(sku, qty); }
 
 function quickLeaderCheckout(sku, qty){
   const it = INV.items[sku];
   if(!it) return;
   const realQty = Math.min(it.f, qty);
-  if(realQty <= 0){
-    toast(`Stock congélateur épuisé pour ${it.n} !`);
-    return;
-  }
+  if(realQty <= 0){ toast(`Réserve vide : ${it.n}`); return; }
   it.f -= realQty;
-  it.p.push({id: ++uid, q: realQty, a: 0, max: it.max});
+  const lot = {id: ++uid, q: realQty, a: 0, max: it.max};
+  it.p.push(lot);
   playClickSound(580, 'sine', 0.08);
-  toast(`Action Leader : +${realQty} ${it.u} de ${it.n} sortis en passe`);
 
-  // Synchronisation asynchrone avec l'API FastAPI si disponible
-  fetch('/api/inventory/checkout', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({sku, quantity: realQty})
-  }).catch(()=>{});
+  // La synchronisation serveur ne part qu'après la fenêtre d'annulation
+  const out = {sku, lotId: lot.id, q: realQty};
+  out.sync = setTimeout(() => {
+    fetch('/api/inventory/checkout', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({sku, quantity: realQty})
+    }).catch(()=>{});
+  }, LT.undoMs);
+  lastOut = out;
+  showLeaderUndo(`Sorti ${realQty} ${it.u} · ${LEADER_PROD_META[sku].short}`);
+  renderLeader();
+  if(view === 'manager') renderManager();
+}
 
+function showLeaderUndo(text){
+  const u = $('#l-undo');
+  u.hidden = false;
+  u.innerHTML = `<div class="bar"><span>${text}</span><button class="k-btn sec" type="button" onclick="leaderUndo()">Annuler</button></div>`;
+  clearTimeout(undoTimer);
+  undoTimer = setTimeout(() => { u.hidden = true; }, LT.undoMs);
+}
+
+function leaderUndo(){
+  if(!lastOut) return;
+  clearTimeout(lastOut.sync); clearTimeout(undoTimer);
+  const it = INV.items[lastOut.sku], b = it.p.find(x => x.id === lastOut.lotId);
+  if(b){
+    const back = Math.min(b.q, lastOut.q);
+    b.q -= back; it.f += back;
+    it.p = it.p.filter(x => x.q > 0);
+    toast(back < lastOut.q ? `Annulation partielle : ${back} ${it.u} remis en réserve, le reste est déjà utilisé` : 'Sortie annulée');
+  } else {
+    toast('Annulation impossible : ce lot est déjà utilisé en cuisine');
+  }
+  lastOut = null;
+  $('#l-undo').hidden = true;
   renderLeader();
   if(view === 'manager') renderManager();
 }
@@ -1237,29 +980,20 @@ function quickLeaderCheckout(sku, qty){
 function quickLeaderReturnIce(sku){
   const it = INV.items[sku];
   if(!it.canRet){
-    toast('Action interdite : la viande sortie ne retourne JAMAIS au congélateur !');
+    toast('Action interdite : la viande sortie ne retourne jamais au congélateur');
     return;
   }
-  const avail = sum(it.p, 'q');
-  if(avail <= 0){
-    toast('Aucune glace en préparation à réintégrer.');
+  const take = sum(it.p, 'q');
+  if(take <= 0){
+    toast('Aucune glace en préparation à réintégrer');
     return;
   }
-  const take = Math.min(avail, 2);
-  let rem = take;
-  it.p.forEach(b => {
-    if(rem <= 0) return;
-    const t = Math.min(b.q, rem);
-    b.q -= t;
-    rem -= t;
-  });
-  it.p = it.p.filter(b => b.q > 0);
+  it.p = [];
   it.f += take;
   INV.returnedIce += take;
   playClickSound(440, 'triangle', 0.1);
-  toast(`Fin de service : ${take} ${it.u} de glace réintégrés au congélateur avec succès.`);
+  toast(`Fin de service : ${take} ${it.u} de glace remis au congélateur`);
 
-  // Synchronisation asynchrone avec l'API FastAPI si disponible
   fetch('/api/inventory/return', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
@@ -1416,7 +1150,7 @@ function switchView(targetView){
   $('#v-bilan').classList.toggle('on',view==='bilan');
   if(view==='cuisine')renderCuisineKDS();
   if(view==='bilan')bilan();
-  if(view==='leader')renderLeader();
+  if(view==='leader'){syncLeaderForecast();renderLeader();}
   if(view==='manager')renderManager();
 }
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>switchView(b.dataset.v));
@@ -1437,7 +1171,7 @@ tg('#pz',v=>paused=v);tg('#au',v=>{auto=v;toast(v?'Mode auto : l’agent lance l
 tg('#of',v=>{off=v;$('#st').classList.toggle('bad',v);$('#stt').textContent=v?'Caisse déconnectée':'Caisse synchronisée';$('#bn').classList.toggle('on',v);S.forEach(p=>p.snooze=0);decide();render()});
 $('#sg').onclick=()=>{surge=2.2;surgeEnd=T+20;toast('Coup de feu imprévu : l’agent ajuste d’après les ventes')};
 $('#th').onclick=()=>{const r=document.documentElement,d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;r.dataset.theme=d?'light':'dark'};
-decide();render();
+decide();render();syncLeaderForecast();
 setTimeout(()=>{document.body.classList.add('ready');loop()},1600);
 </script>
 </body>

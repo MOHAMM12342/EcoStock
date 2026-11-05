@@ -1,0 +1,21 @@
+produit_id,produit,categorie,type_viande,nombre_pieces_viande,alternative_sans_viande,nombre_galettes_vegetales,menu_avec_frites_et_boisson
+P01,Hamburger,burger,Hamb,1,,0,0
+P02,Big King,burger,Hamb,2,,0,0
+P03,Whopper,burger,Whopper,1,,0,0
+P04,Steakhouse,burger,Whopper,1,,0,0
+P05,Master fictif,burger,Master,1,,0,0
+P06,Double Whopper,burger,Whopper,2,,0,0
+P07,Burger poulet,burger,Poulet,1,,0,0
+P08,Burger vegetal,burger,Aucune,0,Galette vegetale,1,0
+P09,Frites,accompagnement,Aucune,0,,0,0
+P10,Boisson,boisson,Aucune,0,,0,0
+M01,Menu Hamburger,menu,Hamb,1,,0,1
+M02,Menu Big King,menu,Hamb,2,,0,1
+M03,Menu Whopper,menu,Whopper,1,,0,1
+M04,Menu Steakhouse,menu,Whopper,1,,0,1
+M05,Menu Master fictif,menu,Master,1,,0,1
+M06,Menu Double Whopper,menu,Whopper,2,,0,1
+M07,Menu Burger poulet,menu,Poulet,1,,0,1
+M08,Menu Burger vegetal,menu,Aucune,0,Galette vegetale,1,1
+P11,Double Steakhouse,burger,Whopper,2,,0,0
+M11,Menu Double Steakhouse,menu,Whopper,2,,0,1

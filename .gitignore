@@ -5,4 +5,4 @@ __pycache__/
 .pytest_cache/
 *.xlsx
 .DS_Store
-
+src/data/extracted/tickets.csv

@@ -1,0 +1,18 @@
+{
+  "tickets": 944451,
+  "jours": 546,
+  "periode": "2025-01-01 au 2026-06-30 inclus",
+  "premier_ticket": "2025-01-01T10:01:33+01:00",
+  "dernier_ticket": "2026-06-30T23:57:00+02:00",
+  "tickets_vides": 0,
+  "quantites_nulles_ou_negatives": 0,
+  "identifiants_uniques": 944451,
+  "nombre_unites_double_steakhouse": 35594,
+  "tickets_sans_boeuf_mais_non_vides": 64855,
+  "totaux_boeuf_inchanges": {
+    "Hamb": 889638,
+    "Whopper": 906741,
+    "Master": 142282
+  },
+  "controle": "OK : 944451 tickets relus ; produits reconnus ; quantites strictement positives ; historique et besoins boeuf conserves"
+}
